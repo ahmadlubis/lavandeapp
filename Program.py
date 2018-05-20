@@ -2,17 +2,31 @@
 """
 Spyder Editor
 
-This is a temporary script file.
+"Valar Morghulis"
 """
 
 import pandas as pd
 import seaborn as sns
 import xlwings as xw
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score, train_test_split, GridSearchCV
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.metrics import confusion_matrix
 from sklearn import svm
 import matplotlib.pyplot as plt
+import math, time, pickle
+from imblearn.over_sampling import SMOTE
+
+start = time.time()
+
+# ======================== Decimal-to-Percent =================================
+
+def percentage (decimal):
+# Mengubah Decimal menjadi percent dalam string
+    return ("%.1f" % (decimal * 100));
+
+# =============================================================================
+
+
 
 
 # ============================ LOAD Excel w/ Pass =============================
@@ -45,7 +59,7 @@ df.fillna(0, inplace=True)
 
 # ========================== Separasi Data Target =============================
 
-df_target = df.iloc[:, 11] #iloc[element_of_feature, key_of_feature]
+df_target = df.iloc[:, 12] #iloc[element_of_feature, key_of_feature]
 del df['Kategori']
 
 #print(df_target)
@@ -58,18 +72,30 @@ df = pd.get_dummies(df,
 
 # ============================ LEARNING PART===================================
 
-clf = svm.SVC()
+parameters = [
+  {'C': [1, 10, 100, 1000], 'gamma': [1/11, 0.001, 0.0001], 'kernel': ['rbf']}
+ ]
 
+#print(len(list(df)))
+
+#svc = svm.SVC()
+#clf = GridSearchCV(svc, parameters)
+
+clf = svm.SVC(C= 1, cache_size= 200, class_weight= None, coef0= 0.0, decision_function_shape= 'ovr', degree= 3, gamma= 0.1, kernel= 'rbf', max_iter= -1, probability= False, random_state= None, shrinking= True, tol= 0.001, verbose= False)
 # ============================= Split-Test ====================================
 X_train, X_test, y_train, y_test = train_test_split(df, df_target, test_size=0.3, random_state=0)
 
-y_pred = clf.fit(df, df_target).predict(df)
+#clf.fit(df, df_target)
+sm = SMOTE(random_state=42)
 
-print(confusion_matrix(df_target, y_pred))
+X_res, y_res = sm.fit_sample(df, df_target)
+
+y_pred = clf.fit(X_res, y_res).predict(df)
 
 cm = confusion_matrix(df_target, y_pred)
+#cm = [[6768, 105], [1181, 25484]]
 
-#cm = [[6664, 209], [1398, 25267]]
+print(cm)
 
 TN = cm[0][0]
 TP = cm[1][1]
@@ -81,13 +107,28 @@ Presisi = (TP)/(TP+FP)
 Recall = (TP)/(TP+FN)
 Spesitifitas = (TN)/(TN+FP)
 
-print("Akurasi: ", Akurasi)
-print("Presisi: ", Presisi)
-print("Recall: ", Recall)
-print("Spesitifitas: ", Spesitifitas)
+print("Akurasi: ", percentage(Akurasi), "%")
+print("Presisi: ", percentage(Presisi), "%")
+print("Recall: ", percentage(Recall), "%")
+print("Spesitifitas: ", percentage(Spesitifitas), "%")
 
 #print(clf.score(df, df_target))
 
+end = time.time()
+time_taken = int(math.ceil(end - start))
+print("Time: ", int(math.floor(time_taken / 60)), " minutes & ", time_taken % 60, " seconds.")
+# =============================================================================
+
+# ===================== Save / Load Classifier Object =========================
+# 
+
+file = open("SVM.obj", "wb")
+pickle.dump(clf,file)
+
+#file = open("SVM.obj",'rb')
+#object_file = pickle.load(file)
+
+file.close()
 
 # =============================================================================
 
@@ -111,3 +152,9 @@ print("Spesitifitas: ", Spesitifitas)
 #         print(filename)
 # =============================================================================
 
+#Best parameters set:
+#(C= 1, cache_size= 200, class_weight= None, coef0= 0.0, decision_function_shape= 'ovr', degree= 3, gamma= 0.09090909090909091, kernel= 'rbf', max_iter= -1, probability= False, random_state= None, shrinking= True, tol= 0.001, verbose= False)
+
+#print("Best parameters set:")
+#best_parameters = clf.best_estimator_.get_params()
+#print(best_parameters)
