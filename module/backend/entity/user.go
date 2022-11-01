@@ -1,6 +1,9 @@
 package entity
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type UserRole uint8
 
@@ -9,12 +12,56 @@ const (
 	UserRoleAdmin
 )
 
+func (s UserRole) String() string {
+	switch s {
+	case UserRoleResident:
+		return "resident"
+	case UserRoleAdmin:
+		return "admin"
+	default:
+		return "invalid_user_role"
+	}
+}
+
+func ParseUserRole(s string) (UserRole, error) {
+	switch s {
+	case "resident":
+		return UserRoleResident, nil
+	case "admin":
+		return UserRoleAdmin, nil
+	default:
+		return 0, fmt.Errorf("invalid user role")
+	}
+}
+
 type UserResidenceStatus uint8
 
 const (
 	UserResidenceStatusNotApplicable UserResidenceStatus = iota + 1
 	UserResidenceStatusRenter
 )
+
+func (s UserResidenceStatus) String() string {
+	switch s {
+	case UserResidenceStatusNotApplicable:
+		return "N/A"
+	case UserResidenceStatusRenter:
+		return "renter"
+	default:
+		return "invalid_user_residence_status"
+	}
+}
+
+func ParseUserResidenceStatus(s string) (UserResidenceStatus, error) {
+	switch s {
+	case "N/A":
+		return UserResidenceStatusNotApplicable, nil
+	case "renter":
+		return UserResidenceStatusRenter, nil
+	default:
+		return 0, fmt.Errorf("invalid user role")
+	}
+}
 
 type User struct {
 	ID              uint                `gorm:"column:id"`
