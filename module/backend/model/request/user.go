@@ -1,10 +1,9 @@
 package request
 
 type RegisterUserRequest struct {
-	Name            string
-	NIK             string
-	Email           string
-	PhoneNo         string
-	ResidenceStatus string
-	Password        string
+	Name     string `json:"name"`
+	NIK      string `json:"nik"`
+	Email    string `json:"email"`
+	PhoneNo  string `json:"phone_no"`
+	Password string `json:"password"`
 }

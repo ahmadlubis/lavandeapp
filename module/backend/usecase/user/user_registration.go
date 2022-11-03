@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -28,7 +29,7 @@ func NewUserRegistrationUsecase(db *gorm.DB) usecase.UserRegistrationUsecase {
 	return &userRegistrationUsecase{db: db}
 }
 
-func (u *userRegistrationUsecase) RegisterUser(req request.RegisterUserRequest) (entity.User, error) {
+func (u *userRegistrationUsecase) RegisterUser(_ context.Context, req request.RegisterUserRequest) (entity.User, error) {
 	var err = u.validateRegisterRequest(req)
 	if err != nil {
 		return entity.User{}, err
@@ -39,19 +40,14 @@ func (u *userRegistrationUsecase) RegisterUser(req request.RegisterUserRequest) 
 		return entity.User{}, model.NewUnknownError(req.Email, err)
 	}
 
-	status, err := entity.ParseUserResidenceStatus(req.ResidenceStatus)
-	if err != nil {
-		return entity.User{}, model.NewExpectedError("invalid residence_status", "USER_INVALID", http.StatusBadRequest, req.Email)
-	}
-
 	user := entity.User{
-		Name:            req.Name,
-		NIK:             req.NIK,
-		Email:           req.Email,
-		PhoneNo:         req.PhoneNo,
-		Role:            entity.UserRoleResident,
-		ResidenceStatus: status,
-		Password:        passwordHash,
+		Name:     req.Name,
+		NIK:      req.NIK,
+		Email:    req.Email,
+		PhoneNo:  req.PhoneNo,
+		Role:     entity.UserRoleResident,
+		Status:   entity.UserStatusActive,
+		Password: passwordHash,
 	}
 	if result := u.db.Create(&user); result.Error != nil {
 		if mysqlErr, ok := result.Error.(*mysql.MySQLError); ok {

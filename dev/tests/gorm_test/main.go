@@ -21,11 +21,11 @@ func main() {
 	}
 
 	user := entity.User{
-		Name:            "Test User",
-		Email:           "test@email.com",
-		Role:            entity.UserRoleResident,
-		ResidenceStatus: entity.UserResidenceStatusRenter,
-		Password:        pass,
+		Name:     "Test User",
+		Email:    "test@email.com",
+		Role:     entity.UserRoleResident,
+		Status:   entity.UserStatusActive,
+		Password: pass,
 	}
 
 	result := db.Create(&user)

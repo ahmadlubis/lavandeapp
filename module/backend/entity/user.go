@@ -34,46 +34,46 @@ func ParseUserRole(s string) (UserRole, error) {
 	}
 }
 
-type UserResidenceStatus uint8
+type UserStatus uint8
 
 const (
-	UserResidenceStatusNotApplicable UserResidenceStatus = iota + 1
-	UserResidenceStatusRenter
+	UserStatusActive UserStatus = iota + 1
+	UserStatusNonactive
 )
 
-func (s UserResidenceStatus) String() string {
+func (s UserStatus) String() string {
 	switch s {
-	case UserResidenceStatusNotApplicable:
-		return "N/A"
-	case UserResidenceStatusRenter:
-		return "renter"
+	case UserStatusActive:
+		return "active"
+	case UserStatusNonactive:
+		return "nonactive"
 	default:
 		return "invalid_user_residence_status"
 	}
 }
 
-func ParseUserResidenceStatus(s string) (UserResidenceStatus, error) {
+func ParseUserStatus(s string) (UserStatus, error) {
 	switch s {
-	case "N/A":
-		return UserResidenceStatusNotApplicable, nil
-	case "renter":
-		return UserResidenceStatusRenter, nil
+	case "active":
+		return UserStatusActive, nil
+	case "nonactive":
+		return UserStatusNonactive, nil
 	default:
-		return 0, fmt.Errorf("invalid user role")
+		return 0, fmt.Errorf("invalid user status")
 	}
 }
 
 type User struct {
-	ID              uint                `gorm:"column:id"`
-	Name            string              `gorm:"column:name;default:null"`
-	NIK             string              `gorm:"column:nik;default:null"`
-	Email           string              `gorm:"column:email;default:null"`
-	PhoneNo         string              `gorm:"column:phone_no;default:null"`
-	Role            UserRole            `gorm:"column:role;default:null"`
-	ResidenceStatus UserResidenceStatus `gorm:"column:residence_status;default:null"`
-	Password        []byte              `gorm:"column:password;default:null"`
-	CreatedAt       time.Time           `gorm:"column:created_at;"`
-	UpdatedAt       time.Time           `gorm:"column:updated_at"`
+	ID        uint       `gorm:"column:id" json:"id"`
+	Name      string     `gorm:"column:name;default:null" json:"name"`
+	NIK       string     `gorm:"column:nik;default:null" json:"nik"`
+	Email     string     `gorm:"column:email;default:null" json:"email"`
+	PhoneNo   string     `gorm:"column:phone_no;default:null" json:"phone_no"`
+	Role      UserRole   `gorm:"column:role;default:null" json:"role"`
+	Status    UserStatus `gorm:"column:status;default:null" json:"status"`
+	Password  []byte     `gorm:"column:password;default:null" json:"-"`
+	CreatedAt time.Time  `gorm:"column:created_at;" json:"created_at"`
+	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updated_at"`
 }
 
 func (User) TableName() string {

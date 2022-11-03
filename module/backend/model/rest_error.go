@@ -3,11 +3,11 @@ package model
 import "net/http"
 
 type RestError struct {
-	Message       string
-	Code          string
-	Status        int
-	TrackId       string
-	OriginalError error
+	Message       string `json:"error_message"`
+	Code          string `json:"error_code"`
+	Status        int    `json:"-"`
+	TrackId       string `json:"-"`
+	OriginalError error  `json:"-"`
 }
 
 func (r *RestError) Error() string {
