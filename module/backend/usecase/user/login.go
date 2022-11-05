@@ -7,7 +7,6 @@ import (
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
-	"github.com/ahmadlubis/lavandeapp/module/backend/model/response"
 	"github.com/ahmadlubis/lavandeapp/module/backend/usecase"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -25,38 +24,41 @@ func NewUserLoginUsecase(cfg config.AuthConfig, db *gorm.DB) usecase.UserLoginUs
 	return &userLoginUsecase{cfg: cfg, db: db}
 }
 
-func (u *userLoginUsecase) Login(ctx context.Context, req request.LoginUserRequest) (response.UserAccessTokenResponse, error) {
+func (u *userLoginUsecase) Login(ctx context.Context, req request.LoginUserRequest) (model.AccessToken, error) {
 	var user entity.User
 	var invalidLoginError = model.NewExpectedError("wrong email or password", "USER_UNAUTHORIZED", http.StatusUnauthorized, req.Email)
 
 	if err := u.db.Where("email = ?", req.Email).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return response.UserAccessTokenResponse{}, invalidLoginError
+			return model.AccessToken{}, invalidLoginError
 		}
-		return response.UserAccessTokenResponse{}, model.NewUnknownError(req.Email, err)
+		return model.AccessToken{}, model.NewUnknownError(req.Email, err)
 	}
 
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(req.Password)); err != nil {
-		return response.UserAccessTokenResponse{}, invalidLoginError
+		return model.AccessToken{}, invalidLoginError
 	}
 
 	return u.generateJwt(ctx, user)
 }
 
-func (u *userLoginUsecase) generateJwt(_ context.Context, user entity.User) (response.UserAccessTokenResponse, error) {
-	expiredAt := time.Now().Add(1 * time.Hour)
+func (u *userLoginUsecase) generateJwt(_ context.Context, user entity.User) (model.AccessToken, error) {
+	now := time.Now()
+	expiredAt := now.Add(1 * time.Hour)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": user.Email,
 		"role":  user.Role.String(),
-		"exp":   expiredAt,
+		"exp":   expiredAt.Unix(),
+		"iat":   now.Unix(),
+		"nbf":   now.Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte(u.cfg.JWTSecretKey))
 	if err != nil {
-		return response.UserAccessTokenResponse{}, model.NewUnknownError(user.Email, err)
+		return model.AccessToken{}, model.NewUnknownError(user.Email, err)
 	}
 
-	return response.UserAccessTokenResponse{
+	return model.AccessToken{
 		AccessToken: tokenString,
 		ExpiredAt:   expiredAt,
 	}, nil

@@ -2,6 +2,10 @@ package model
 
 import "net/http"
 
+var (
+	InvalidTokenError = NewExpectedError("session expired, please login again", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
+)
+
 type RestError struct {
 	Message       string `json:"error_message"`
 	Code          string `json:"error_code"`

@@ -1,8 +1,8 @@
-package response
+package model
 
 import "time"
 
-type UserAccessTokenResponse struct {
+type AccessToken struct {
 	AccessToken string    `json:"access_token"`
 	ExpiredAt   time.Time `json:"expired_at"`
 }

@@ -18,7 +18,7 @@ func main() {
 	}
 
 	registrar := user.NewUserRegistrationUsecase(db)
-	usr, err := registrar.RegisterUser(context.Background(), request.RegisterUserRequest{
+	usr, err := registrar.Register(context.Background(), request.RegisterUserRequest{
 		Name:     "Test user01",
 		Email:    "test.email@gmial.com",
 		Password: "password",

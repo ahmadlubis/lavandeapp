@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -21,6 +22,10 @@ func (s UserRole) String() string {
 	default:
 		return "invalid_user_role"
 	}
+}
+
+func (s UserRole) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.String())
 }
 
 func ParseUserRole(s string) (UserRole, error) {
@@ -50,6 +55,10 @@ func (s UserStatus) String() string {
 	default:
 		return "invalid_user_residence_status"
 	}
+}
+
+func (s UserStatus) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.String())
 }
 
 func ParseUserStatus(s string) (UserStatus, error) {

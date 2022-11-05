@@ -26,7 +26,7 @@ func (h *userRegistrationHandler) ServeHTTP(w http.ResponseWriter, r *http.Reque
 		return model.NewExpectedError("bad request format", "USER_INVALID", http.StatusBadRequest, "")
 	}
 
-	user, err := h.usecase.RegisterUser(r.Context(), req)
+	user, err := h.usecase.Register(r.Context(), req)
 	if err != nil {
 		return err
 	}

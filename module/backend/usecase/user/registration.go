@@ -29,7 +29,7 @@ func NewUserRegistrationUsecase(db *gorm.DB) usecase.UserRegistrationUsecase {
 	return &userRegistrationUsecase{db: db}
 }
 
-func (u *userRegistrationUsecase) RegisterUser(_ context.Context, req request.RegisterUserRequest) (entity.User, error) {
+func (u *userRegistrationUsecase) Register(_ context.Context, req request.RegisterUserRequest) (entity.User, error) {
 	var err = u.validateRegisterRequest(req)
 	if err != nil {
 		return entity.User{}, err

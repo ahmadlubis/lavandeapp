@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+const (
+	RequestSubjectContextKey = "context.subject"
+)
+
 // HandleWithError and Handler will be used instead of http.Handler for all middleware and request handler
 // This is done so that the error object is accessible on all Middleware, and only the last middleware need to format the error to the responseWriter
 type HandleWithError func(w http.ResponseWriter, r *http.Request) error
