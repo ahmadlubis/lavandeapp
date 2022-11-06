@@ -4,6 +4,7 @@ import "net/http"
 
 var (
 	InvalidTokenError = NewExpectedError("session expired, please login again", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
+	UserNotFoundError = NewExpectedError("user not found", "USER_NOT_FOUND", http.StatusNotFound, "")
 )
 
 type RestError struct {
@@ -16,6 +17,11 @@ type RestError struct {
 
 func (r *RestError) Error() string {
 	return r.Message
+}
+
+func (r *RestError) WithTrackId(trackId string) error {
+	r.TrackId = trackId
+	return r
 }
 
 func NewExpectedError(message, code string, status int, trackId string) *RestError {

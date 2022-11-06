@@ -9,6 +9,7 @@ import (
 	"github.com/ahmadlubis/lavandeapp/module/backend/usecase"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type userTokenVerificationUsecase struct {
@@ -21,23 +22,23 @@ func NewUserTokenVerificationUsecase(cfg config.AuthConfig, db *gorm.DB) usecase
 }
 
 func (u *userTokenVerificationUsecase) VerifyToken(ctx context.Context, tokenString string) (entity.User, error) {
-	var email, err = u.parseAndVerifyToken(ctx, tokenString)
+	var id, err = u.parseAndVerifyToken(ctx, tokenString)
 	if err != nil {
 		return entity.User{}, model.InvalidTokenError
 	}
 
 	var user entity.User
-	if err := u.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return entity.User{}, model.InvalidTokenError
 		}
-		return entity.User{}, model.NewUnknownError(email, err)
+		return entity.User{}, model.NewUnknownError(strconv.FormatUint(id, 10), err)
 	}
 
 	return user, nil
 }
 
-func (u *userTokenVerificationUsecase) parseAndVerifyToken(_ context.Context, tokenString string) (string, error) {
+func (u *userTokenVerificationUsecase) parseAndVerifyToken(_ context.Context, tokenString string) (uint64, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, model.InvalidTokenError
@@ -47,17 +48,16 @@ func (u *userTokenVerificationUsecase) parseAndVerifyToken(_ context.Context, to
 		return []byte(u.cfg.JWTSecretKey), nil
 	})
 	if err != nil {
-		return "", model.InvalidTokenError
+		return 0, model.InvalidTokenError
 	}
 
 	if token.Claims.Valid() != nil {
-		return "", model.InvalidTokenError
+		return 0, model.InvalidTokenError
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return "", model.InvalidTokenError
+		return 0, model.InvalidTokenError
 	}
-
-	return claims["email"].(string), nil
+	return uint64(claims["id"].(float64)), nil
 }

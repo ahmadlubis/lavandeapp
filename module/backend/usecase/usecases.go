@@ -18,3 +18,7 @@ type UserLoginUsecase interface {
 type UserTokenVerificationUsecase interface {
 	VerifyToken(ctx context.Context, token string) (entity.User, error)
 }
+
+type UserSelfUpdateUsecase interface {
+	SelfUpdate(ctx context.Context, request request.SelfUpdateUserRequest) (entity.User, error)
+}

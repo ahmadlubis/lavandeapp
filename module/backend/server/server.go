@@ -20,11 +20,13 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	registerUserUsecase := user.NewUserRegistrationUsecase(db)
 	loginUserUsecase := user.NewUserLoginUsecase(cfg.AuthConfig, db)
 	verifyUserTokenUsecase := user.NewUserTokenVerificationUsecase(cfg.AuthConfig, db)
+	selfUpdateUserUsecase := user.NewUserSelfUpdateUsecase(db)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/v1/user/register", middleware.WithDefaultNoAuthMiddlewares(handler.NewUserRegistrationHandler(registerUserUsecase)).ServeHTTP).Methods("POST")
 	router.HandleFunc("/v1/user/login", middleware.WithDefaultNoAuthMiddlewares(handler.NewUserLoginHandler(loginUserUsecase)).ServeHTTP).Methods("POST")
 	router.HandleFunc("/v1/user/me", middleware.WithDefaultMiddlewares(handler.NewUserSelfInfoHandler(), verifyUserTokenUsecase).ServeHTTP).Methods("GET")
+	router.HandleFunc("/v1/user/me", middleware.WithDefaultMiddlewares(handler.NewUserSelfUpdateHandler(selfUpdateUserUsecase), verifyUserTokenUsecase).ServeHTTP).Methods("PATCH")
 
 	return router, nil
 }

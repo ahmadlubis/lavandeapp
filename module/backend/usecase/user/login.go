@@ -46,11 +46,11 @@ func (u *userLoginUsecase) generateJwt(_ context.Context, user entity.User) (mod
 	now := time.Now()
 	expiredAt := now.Add(1 * time.Hour)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": user.Email,
-		"role":  user.Role.String(),
-		"exp":   expiredAt.Unix(),
-		"iat":   now.Unix(),
-		"nbf":   now.Unix(),
+		"id":   user.ID,
+		"role": user.Role.String(),
+		"exp":  expiredAt.Unix(),
+		"iat":  now.Unix(),
+		"nbf":  now.Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte(u.cfg.JWTSecretKey))
