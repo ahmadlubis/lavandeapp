@@ -26,3 +26,17 @@ endif
 
 migrate: bin/migrate
 	./bin/migrate -source file://db/migrations -database "mysql://$(MYSQL_USERNAME):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/$(MYSQL_DATABASE)" $(MIGRATE_ARGS)
+
+#####################
+# General Usage
+#####################
+
+run-backend: # generate all go generate command inside backend package.
+	@go run -v app/backend/main.go
+
+docker-start:
+	@docker-compose up
+
+docker-remove:
+	@docker-compose down
+
