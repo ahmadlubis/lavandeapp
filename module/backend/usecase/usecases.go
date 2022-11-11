@@ -26,3 +26,7 @@ type UserSelfUpdateUsecase interface {
 type UnitCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateUnitRequest) (entity.Unit, error)
 }
+
+type TenantCreationUsecase interface {
+	Create(ctx context.Context, req request.CreateTenantRequest) (entity.Tenant, error)
+}

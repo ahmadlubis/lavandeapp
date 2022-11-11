@@ -2,7 +2,8 @@ package entity
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/ahmadlubis/lavandeapp/module/backend/model"
+	"net/http"
 	"time"
 )
 
@@ -35,7 +36,7 @@ func ParseTenantRole(s string) (TenantRole, error) {
 	case "renter_family":
 		return TenantRoleRenterFamily, nil
 	default:
-		return 0, fmt.Errorf("invalid tenant role")
+		return 0, model.NewExpectedError("invalid tenant role", "TENANT_INVALID", http.StatusBadRequest, "")
 	}
 }
 
@@ -52,4 +53,13 @@ type Tenant struct {
 
 func (Tenant) TableName() string {
 	return "tenants"
+}
+
+func (t Tenant) Validate() error {
+	if t.StartAt != nil && t.EndAt != nil {
+		if !t.StartAt.Before(*t.EndAt) {
+			return model.NewExpectedError("end_at must be after start_at", "TENANT_INVALID", http.StatusBadRequest, "")
+		}
+	}
+	return nil
 }
