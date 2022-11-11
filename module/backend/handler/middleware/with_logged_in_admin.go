@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/handler"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/usecase"
@@ -9,12 +10,12 @@ import (
 	"strings"
 )
 
-type loggedInUserMiddleware struct {
+type loggedInAdminMiddleware struct {
 	handler handler.Handler
 	usecase usecase.UserTokenVerificationUsecase
 }
 
-func (l *loggedInUserMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
+func (l *loggedInAdminMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	tokens := strings.Split(r.Header.Get("Authorization"), "Bearer ")
 	if len(tokens) != 2 {
 		return model.InvalidTokenError
@@ -24,14 +25,17 @@ func (l *loggedInUserMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	if err != nil {
 		return err
 	}
+	if user.Role != entity.UserRoleAdmin {
+		return model.NonAdminError
+	}
 
 	newCtx := context.WithValue(r.Context(), handler.RequestSubjectContextKey, user)
 
 	return l.handler.ServeHTTP(w, r.WithContext(newCtx))
 }
 
-func WithLoggedInUser(handlerToWrap handler.Handler, usecase usecase.UserTokenVerificationUsecase) handler.Handler {
-	return &loggedInUserMiddleware{
+func WithLoggedInAdmin(handlerToWrap handler.Handler, usecase usecase.UserTokenVerificationUsecase) handler.Handler {
+	return &loggedInAdminMiddleware{
 		handler: handlerToWrap,
 		usecase: usecase,
 	}

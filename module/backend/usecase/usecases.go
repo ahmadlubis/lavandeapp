@@ -22,3 +22,7 @@ type UserTokenVerificationUsecase interface {
 type UserSelfUpdateUsecase interface {
 	SelfUpdate(ctx context.Context, request request.SelfUpdateUserRequest) (entity.User, error)
 }
+
+type UnitCreationUsecase interface {
+	Create(ctx context.Context, req request.CreateUnitRequest) (entity.Unit, error)
+}
