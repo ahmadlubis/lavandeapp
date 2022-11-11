@@ -13,8 +13,8 @@ type LoginUserRequest struct {
 	Password string `json:"password"`
 }
 
-type SelfUpdateUserRequest struct {
-	TargetEmail string `json:"-"`
+type UpdateUserRequest struct {
+	TargetEmail string `json:"target_email"`
 	Name        string `json:"name"`
 	NIK         string `json:"nik"`
 	Email       string `json:"email"`

@@ -1,20 +1,21 @@
-package handler
+package user
 
 import (
 	"encoding/json"
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
+	"github.com/ahmadlubis/lavandeapp/module/backend/handler"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"net/http"
 )
 
 type userSelfInfoHandler struct{}
 
-func NewUserSelfInfoHandler() Handler {
+func NewUserSelfInfoHandler() handler.Handler {
 	return &userSelfInfoHandler{}
 }
 
 func (h *userSelfInfoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
-	var user, ok = r.Context().Value(RequestSubjectContextKey).(entity.User)
+	var user, ok = r.Context().Value(handler.RequestSubjectContextKey).(entity.User)
 	if !ok {
 		return model.InvalidTokenError
 	}

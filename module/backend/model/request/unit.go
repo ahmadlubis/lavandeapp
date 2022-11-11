@@ -8,3 +8,9 @@ type CreateUnitRequest struct {
 	AJB    string `json:"ajb"`
 	Akte   string `json:"akte"`
 }
+
+type UpdateUnitRequest struct {
+	ID   uint64 `json:"id"`
+	AJB  string `json:"ajb"`
+	Akte string `json:"akte"`
+}

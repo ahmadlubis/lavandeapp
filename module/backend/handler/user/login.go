@@ -1,7 +1,8 @@
-package handler
+package user
 
 import (
 	"encoding/json"
+	"github.com/ahmadlubis/lavandeapp/module/backend/handler"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
 	"github.com/ahmadlubis/lavandeapp/module/backend/usecase"
@@ -9,24 +10,24 @@ import (
 	"net/http"
 )
 
-type userRegistrationHandler struct {
-	usecase usecase.UserRegistrationUsecase
+type userLoginHandler struct {
+	usecase usecase.UserLoginUsecase
 }
 
-func NewUserRegistrationHandler(usecase usecase.UserRegistrationUsecase) Handler {
-	return &userRegistrationHandler{usecase: usecase}
+func NewUserLoginHandler(usecase usecase.UserLoginUsecase) handler.Handler {
+	return &userLoginHandler{usecase: usecase}
 }
 
-func (h *userRegistrationHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
+func (h *userLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	reqBody, _ := io.ReadAll(r.Body)
 
-	var req request.RegisterUserRequest
+	var req request.LoginUserRequest
 	err := json.Unmarshal(reqBody, &req)
 	if err != nil {
 		return model.NewExpectedError("bad request format", "USER_INVALID", http.StatusBadRequest, "")
 	}
 
-	user, err := h.usecase.Register(r.Context(), req)
+	user, err := h.usecase.Login(r.Context(), req)
 	if err != nil {
 		return err
 	}

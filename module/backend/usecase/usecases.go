@@ -19,12 +19,20 @@ type UserTokenVerificationUsecase interface {
 	VerifyToken(ctx context.Context, token string) (entity.User, error)
 }
 
-type UserSelfUpdateUsecase interface {
-	SelfUpdate(ctx context.Context, request request.SelfUpdateUserRequest) (entity.User, error)
+type UserUpdateUsecase interface {
+	Update(ctx context.Context, request request.UpdateUserRequest) (entity.User, error)
 }
 
 type UnitCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateUnitRequest) (entity.Unit, error)
+}
+
+type UnitOwnerVerificationUsecase interface {
+	VerifyOwner(ctx context.Context, unitID, userID uint64) error
+}
+
+type UnitUpdateUsecase interface {
+	Update(ctx context.Context, request request.UpdateUnitRequest) (entity.Unit, error)
 }
 
 type TenantCreationUsecase interface {

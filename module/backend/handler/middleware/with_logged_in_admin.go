@@ -26,7 +26,7 @@ func (l *loggedInAdminMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Reque
 		return err
 	}
 	if user.Role != entity.UserRoleAdmin {
-		return model.NonAdminError
+		return model.ForbiddenError
 	}
 
 	newCtx := context.WithValue(r.Context(), handler.RequestSubjectContextKey, user)

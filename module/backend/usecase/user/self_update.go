@@ -18,11 +18,11 @@ type userSelfUpdateUsecase struct {
 	db *gorm.DB
 }
 
-func NewUserSelfUpdateUsecase(db *gorm.DB) usecase.UserSelfUpdateUsecase {
+func NewUserSelfUpdateUsecase(db *gorm.DB) usecase.UserUpdateUsecase {
 	return &userSelfUpdateUsecase{db: db}
 }
 
-func (u *userSelfUpdateUsecase) SelfUpdate(_ context.Context, req request.SelfUpdateUserRequest) (entity.User, error) {
+func (u *userSelfUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequest) (entity.User, error) {
 	var user entity.User
 	if err := u.db.Where("email = ?", req.TargetEmail).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

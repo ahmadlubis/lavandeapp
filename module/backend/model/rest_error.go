@@ -5,7 +5,7 @@ import "net/http"
 var (
 	InvalidTokenError = NewExpectedError("session expired, please login again", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
 	UserNotFoundError = NewExpectedError("user not found", "USER_NOT_FOUND", http.StatusNotFound, "")
-	NonAdminError     = NewExpectedError("forbidden", "USER_FORBIDDEN", http.StatusForbidden, "")
+	ForbiddenError    = NewExpectedError("forbidden", "USER_FORBIDDEN", http.StatusForbidden, "")
 )
 
 type RestError struct {

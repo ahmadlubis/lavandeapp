@@ -10,16 +10,16 @@ import (
 type TenantRole uint8
 
 const (
-	TenantRoleRenter TenantRole = iota + 1
-	TenantRoleRenterFamily
+	TenantRoleOwner TenantRole = iota + 1
+	TenantRoleOwnerFamily
 )
 
 func (s TenantRole) String() string {
 	switch s {
-	case TenantRoleRenter:
-		return "renter"
-	case TenantRoleRenterFamily:
-		return "renter_family"
+	case TenantRoleOwner:
+		return "owner"
+	case TenantRoleOwnerFamily:
+		return "owner_family"
 	default:
 		return "invalid_tenant_role"
 	}
@@ -31,10 +31,10 @@ func (s TenantRole) MarshalJSON() ([]byte, error) {
 
 func ParseTenantRole(s string) (TenantRole, error) {
 	switch s {
-	case "renter":
-		return TenantRoleRenter, nil
-	case "renter_family":
-		return TenantRoleRenterFamily, nil
+	case "owner":
+		return TenantRoleOwner, nil
+	case "owner_family":
+		return TenantRoleOwnerFamily, nil
 	default:
 		return 0, model.NewExpectedError("invalid tenant role", "TENANT_INVALID", http.StatusBadRequest, "")
 	}
