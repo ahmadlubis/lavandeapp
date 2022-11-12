@@ -14,16 +14,17 @@ const (
 )
 
 type User struct {
-	ID        uint64     `gorm:"column:id" json:"id"`
-	Name      string     `gorm:"column:name;default:null" json:"name"`
-	NIK       string     `gorm:"column:nik;default:null" json:"nik"`
-	Email     string     `gorm:"column:email;default:null" json:"email"`
-	PhoneNo   string     `gorm:"column:phone_no;default:null" json:"phone_no"`
-	Role      UserRole   `gorm:"column:role;default:null" json:"role"`
-	Status    UserStatus `gorm:"column:status;default:null" json:"status"`
-	Password  []byte     `gorm:"column:password;default:null" json:"-"`
-	CreatedAt time.Time  `gorm:"column:created_at;" json:"created_at"`
-	UpdatedAt time.Time  `gorm:"column:updated_at" json:"updated_at"`
+	ID        uint64       `gorm:"column:id" json:"id"`
+	Name      string       `gorm:"column:name" json:"name"`
+	NIK       string       `gorm:"column:nik" json:"nik"`
+	Email     string       `gorm:"column:email" json:"email"`
+	PhoneNo   string       `gorm:"column:phone_no" json:"phone_no"`
+	Role      UserRole     `gorm:"column:role" json:"role"`
+	Status    UserStatus   `gorm:"column:status" json:"status"`
+	Religion  UserReligion `gorm:"column:religion" json:"religion"`
+	Password  []byte       `gorm:"column:password" json:"-"`
+	CreatedAt time.Time    `gorm:"column:created_at;" json:"created_at"`
+	UpdatedAt time.Time    `gorm:"column:updated_at" json:"updated_at"`
 }
 
 func (User) TableName() string {

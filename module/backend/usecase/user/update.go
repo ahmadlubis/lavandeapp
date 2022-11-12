@@ -23,8 +23,9 @@ func NewUserSelfUpdateUsecase(db *gorm.DB) usecase.UserUpdateUsecase {
 }
 
 func (u *userSelfUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequest) (entity.User, error) {
+	var err error
 	var user entity.User
-	if err := u.db.Where("email = ?", req.TargetEmail).First(&user).Error; err != nil {
+	if err = u.db.Where("email = ?", req.TargetEmail).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return entity.User{}, model.InvalidTokenError.WithTrackId(req.TargetEmail)
 		}
@@ -54,6 +55,12 @@ func (u *userSelfUpdateUsecase) Update(_ context.Context, req request.UpdateUser
 	}
 	if req.PhoneNo != "" {
 		user.PhoneNo = req.PhoneNo
+	}
+	if req.Religion != "" {
+		user.Religion, err = entity.ParseUserReligion(req.Religion)
+		if err != nil {
+			return entity.User{}, err
+		}
 	}
 
 	if err := user.Validate(); err != nil {

@@ -3,6 +3,8 @@ package entity
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ahmadlubis/lavandeapp/module/backend/model"
+	"net/http"
 )
 
 type UserRole uint8
@@ -68,5 +70,63 @@ func ParseUserStatus(s string) (UserStatus, error) {
 		return UserStatusNonactive, nil
 	default:
 		return 0, fmt.Errorf("invalid user status")
+	}
+}
+
+type UserReligion uint8
+
+const (
+	UserReligionOthers UserReligion = iota + 1
+	UserReligionIslam
+	UserReligionProtestant
+	UserReligionCatholic
+	UserReligionHindu
+	UserReligionBuddha
+	UserReligionConfucius
+)
+
+func (s UserReligion) String() string {
+	switch s {
+	case UserReligionOthers:
+		return "others"
+	case UserReligionIslam:
+		return "islam"
+	case UserReligionProtestant:
+		return "protestant"
+	case UserReligionCatholic:
+		return "catholic"
+	case UserReligionHindu:
+		return "hindu"
+	case UserReligionBuddha:
+		return "buddha"
+	case UserReligionConfucius:
+		return "confucius"
+	default:
+		return "invalid_user_religion"
+	}
+}
+
+func (s UserReligion) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.String())
+}
+
+func ParseUserReligion(s string) (UserReligion, error) {
+	switch s {
+	case "others":
+		return UserReligionOthers, nil
+	case "islam":
+		return UserReligionIslam, nil
+	case "protestant":
+		return UserReligionProtestant, nil
+	case "catholic":
+		return UserReligionCatholic, nil
+	case "hindu":
+		return UserReligionHindu, nil
+	case "buddha":
+		return UserReligionBuddha, nil
+	case "confucius":
+		return UserReligionConfucius, nil
+	default:
+		return 0, model.NewExpectedError("invalid user religion", "USER_INVALID", http.StatusBadRequest, "")
 	}
 }

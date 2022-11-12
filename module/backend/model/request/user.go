@@ -5,6 +5,7 @@ type RegisterUserRequest struct {
 	NIK      string `json:"nik"`
 	Email    string `json:"email"`
 	PhoneNo  string `json:"phone_no"`
+	Religion string `json:"religion"`
 	Password string `json:"password"`
 }
 
@@ -19,5 +20,6 @@ type UpdateUserRequest struct {
 	NIK         string `json:"nik"`
 	Email       string `json:"email"`
 	PhoneNo     string `json:"phone_no"`
+	Religion    string `json:"religion"`
 	Password    string `json:"password"`
 }

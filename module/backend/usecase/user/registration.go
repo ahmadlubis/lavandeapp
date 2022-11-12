@@ -34,6 +34,11 @@ func (u *userRegistrationUsecase) Register(_ context.Context, req request.Regist
 		return entity.User{}, model.NewUnknownError(req.Email, err)
 	}
 
+	religion, err := entity.ParseUserReligion(req.Religion)
+	if err != nil {
+		return entity.User{}, err
+	}
+
 	user := entity.User{
 		Name:     req.Name,
 		NIK:      req.NIK,
@@ -41,6 +46,7 @@ func (u *userRegistrationUsecase) Register(_ context.Context, req request.Regist
 		PhoneNo:  req.PhoneNo,
 		Role:     entity.UserRoleResident,
 		Status:   entity.UserStatusActive,
+		Religion: religion,
 		Password: passwordHash,
 	}
 	if err = user.Validate(); err != nil {
