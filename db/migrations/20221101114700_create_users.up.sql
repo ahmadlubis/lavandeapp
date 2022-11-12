@@ -3,6 +3,7 @@ CREATE TABLE `users`
     `id`                  bigint(20) unsigned  NOT NULL AUTO_INCREMENT,
     `name`                varchar(255)             NULL,
     `nik`                 char(16)                 NULL,
+    `religion`            varchar(255)             NULL,
     `email`               varchar(255)         NOT NULL,
     `phone_no`            varchar(32)              NULL,
     `role`                smallint    unsigned NOT NULL,

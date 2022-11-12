@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -37,4 +38,8 @@ type UnitUpdateUsecase interface {
 
 type TenantCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateTenantRequest) (entity.Tenant, error)
+}
+
+type SuperadminUsecase interface {
+	SetUserAsSuperadmin(ctx context.Context, userID int) error
 }
