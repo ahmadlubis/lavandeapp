@@ -23,3 +23,14 @@ type UpdateUserRequest struct {
 	Religion    string `json:"religion"`
 	Password    string `json:"password"`
 }
+
+type ListUserRequest struct {
+	Name     string `json:"name"`
+	NIK      string `json:"nik"`
+	Email    string `json:"email"`
+	PhoneNo  string `json:"phone_no"`
+	Status   string `json:"status"`
+	Religion string `json:"religion"`
+	Limit    uint64 `json:"limit"`
+	Offset   uint64 `json:"offset"`
+}

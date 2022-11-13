@@ -69,7 +69,7 @@ func ParseUserStatus(s string) (UserStatus, error) {
 	case "nonactive":
 		return UserStatusNonactive, nil
 	default:
-		return 0, fmt.Errorf("invalid user status")
+		return 0, model.NewExpectedError("invalid user status", "USER_INVALID", http.StatusBadRequest, "")
 	}
 }
 

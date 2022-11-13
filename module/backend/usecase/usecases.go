@@ -6,6 +6,7 @@ import (
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
+	"github.com/ahmadlubis/lavandeapp/module/backend/model/response"
 )
 
 type UserRegistrationUsecase interface {
@@ -22,6 +23,10 @@ type UserTokenVerificationUsecase interface {
 
 type UserUpdateUsecase interface {
 	Update(ctx context.Context, request request.UpdateUserRequest) (entity.User, error)
+}
+
+type UserListUsecase interface {
+	List(ctx context.Context, request request.ListUserRequest) (response.ListUserResponse, error)
 }
 
 type UnitCreationUsecase interface {

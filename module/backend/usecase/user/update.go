@@ -14,15 +14,15 @@ import (
 	"net/http"
 )
 
-type userSelfUpdateUsecase struct {
+type userUpdateUsecase struct {
 	db *gorm.DB
 }
 
-func NewUserSelfUpdateUsecase(db *gorm.DB) usecase.UserUpdateUsecase {
-	return &userSelfUpdateUsecase{db: db}
+func NewUserUpdateUsecase(db *gorm.DB) usecase.UserUpdateUsecase {
+	return &userUpdateUsecase{db: db}
 }
 
-func (u *userSelfUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequest) (entity.User, error) {
+func (u *userUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequest) (entity.User, error) {
 	var err error
 	var user entity.User
 	if err = u.db.Where("email = ?", req.TargetEmail).First(&user).Error; err != nil {
