@@ -1,19 +1,18 @@
 version: "3"
 services:
-  lavande-postgres:
+  lavande-mariadb:
     image: mariadb:10.9
-    container_name: lavande-postgres
+    container_name: lavande-mariadb
     volumes:
       - ./db/migrations:/docker-entrypoint-initdb.d
       - lavande_database:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=rootpw
-      - MYSQL_ROOT_PASSWORD=rootpw
+      - MYSQL_USER=lavender
+      - MYSQL_PASSWORD=cihuy
+      - MYSQL_ROOT_PASSWORD=rootcihuy
       - MYSQL_DATABASE=lavandeapp
-    tty: true
     restart: unless-stopped
 
 volumes:

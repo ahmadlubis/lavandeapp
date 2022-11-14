@@ -38,5 +38,5 @@ docker-start:
 	@docker-compose up
 
 docker-remove:
-	@docker-compose down
+	@docker-compose down -v
 
