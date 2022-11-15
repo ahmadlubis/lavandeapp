@@ -41,6 +41,10 @@ type UnitUpdateUsecase interface {
 	Update(ctx context.Context, request request.UpdateUnitRequest) (entity.Unit, error)
 }
 
+type UnitListUsecase interface {
+	List(ctx context.Context, request request.ListUnitRequest) (response.ListUnitResponse, error)
+}
+
 type TenantCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateTenantRequest) (entity.Tenant, error)
 }

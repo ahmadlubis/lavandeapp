@@ -16,7 +16,7 @@ const (
 	maxLimit = 50
 )
 
-type listUserRequst struct {
+type listUserRequest struct {
 	Name     string
 	NIK      string
 	Email    string
@@ -94,7 +94,7 @@ func (u *userListUsecase) List(ctx context.Context, request request.ListUserRequ
 	}, nil
 }
 
-func (u *userListUsecase) normalizeListRequest(req request.ListUserRequest) (listUserRequst, error) {
+func (u *userListUsecase) normalizeListRequest(req request.ListUserRequest) (listUserRequest, error) {
 	var err error
 	var status entity.UserStatus
 	var religion entity.UserReligion
@@ -112,18 +112,18 @@ func (u *userListUsecase) normalizeListRequest(req request.ListUserRequest) (lis
 	if req.Status != "" {
 		status, err = entity.ParseUserStatus(req.Status)
 		if err != nil {
-			return listUserRequst{}, err
+			return listUserRequest{}, err
 		}
 	}
 
 	if req.Religion != "" {
 		religion, err = entity.ParseUserReligion(req.Religion)
 		if err != nil {
-			return listUserRequst{}, err
+			return listUserRequest{}, err
 		}
 	}
 
-	return listUserRequst{
+	return listUserRequest{
 		Name:     req.Name,
 		NIK:      req.NIK,
 		Email:    req.Email,

@@ -33,6 +33,7 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	createUnitUsecase := unit.NewUnitCreationUsecase(db)
 	updateUnitUsecase := unit.NewUnitUpdateUsecase(db)
 	verifyOwnerUsecase := unit.NewUnitOwnerVerificationUsecase(db)
+	listUnitUsecase := unit.NewUnitListUsecase(db)
 
 	createTenantUsecase := tenant.NewTenantCreationUsecase(db)
 
@@ -43,10 +44,12 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	router.HandleFunc("/v1/user/me", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, userHandler.NewUserUpdateHandler(selfUpdateUserUsecase)).ServeHTTP).Methods(http.MethodPatch)
 
 	router.HandleFunc("/v1/unit", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitUpdateHandler(verifyOwnerUsecase, updateUnitUsecase)).ServeHTTP).Methods(http.MethodPatch)
+	router.HandleFunc("/v1/unit", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitListHandler(listUnitUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantCreationHandler(verifyOwnerUsecase, createTenantUsecase)).ServeHTTP).Methods(http.MethodPost)
 
 	router.HandleFunc("/v1/admin/users", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUserListHandler(listUseUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/admin/units", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUnitCreationHandler(createUnitUsecase)).ServeHTTP).Methods(http.MethodPost)
+	router.HandleFunc("/v1/admin/units", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUnitListHandler(listUnitUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/admin/tenants", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewTenantCreationHandler(createTenantUsecase)).ServeHTTP).Methods(http.MethodPost)
 
 	// API to set user as SuperAdmin

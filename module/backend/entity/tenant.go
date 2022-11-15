@@ -11,15 +11,21 @@ type TenantRole uint8
 
 const (
 	TenantRoleOwner TenantRole = iota + 1
-	TenantRoleOwnerFamily
+	TenantRoleRenter
+	TenantRoleResident
+	TenantRoleStaff
 )
 
 func (s TenantRole) String() string {
 	switch s {
 	case TenantRoleOwner:
 		return "owner"
-	case TenantRoleOwnerFamily:
-		return "owner_family"
+	case TenantRoleRenter:
+		return "renter"
+	case TenantRoleResident:
+		return "resident"
+	case TenantRoleStaff:
+		return "staff"
 	default:
 		return "invalid_tenant_role"
 	}
@@ -33,8 +39,12 @@ func ParseTenantRole(s string) (TenantRole, error) {
 	switch s {
 	case "owner":
 		return TenantRoleOwner, nil
-	case "owner_family":
-		return TenantRoleOwnerFamily, nil
+	case "renter":
+		return TenantRoleRenter, nil
+	case "resident":
+		return TenantRoleResident, nil
+	case "staff":
+		return TenantRoleStaff, nil
 	default:
 		return 0, model.NewExpectedError("invalid tenant role", "TENANT_INVALID", http.StatusBadRequest, "")
 	}

@@ -105,6 +105,17 @@ func (u *tenantCreationUsecase) validateCreateTenantRequest(_ context.Context, r
 		}
 	}
 
+	// If the unit still has an active renter, raise error
+	if role == entity.TenantRoleRenter {
+		if err := u.db.Where("unit_id = ? AND role = ? AND (end_at IS NULL OR end_at > ?)", req.UnitID, entity.TenantRoleRenter, now).First(&tenant).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return entity.Unit{}, model.NewUnknownError(strconv.FormatUint(req.UserID, 10), err)
+			}
+		} else {
+			return entity.Unit{}, model.NewExpectedError("target unit already has an active renter", "TENANT_CONFLICT", http.StatusConflict, strconv.FormatUint(req.UnitID, 10))
+		}
+	}
+
 	// If the unit and user already has an active relationship, raise error
 	if err := u.db.Where("unit_id = ? AND user_id = ? AND (end_at IS NULL OR end_at > ?)", req.UnitID, req.UserID, now).First(&tenant).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
