@@ -36,6 +36,7 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	listUnitUsecase := unit.NewUnitListUsecase(db)
 
 	createTenantUsecase := tenant.NewTenantCreationUsecase(db)
+	listTenantUsecase := tenant.NewTenantListUsecase(db)
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/v1/user/register", middleware.WithDefaultNoAuthMiddlewares(userHandler.NewUserRegistrationHandler(registerUserUsecase)).ServeHTTP).Methods(http.MethodPost)
@@ -46,11 +47,13 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	router.HandleFunc("/v1/unit", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitUpdateHandler(verifyOwnerUsecase, updateUnitUsecase)).ServeHTTP).Methods(http.MethodPatch)
 	router.HandleFunc("/v1/unit", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitListHandler(listUnitUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantCreationHandler(verifyOwnerUsecase, createTenantUsecase)).ServeHTTP).Methods(http.MethodPost)
+	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantListHandler(verifyOwnerUsecase, listTenantUsecase)).ServeHTTP).Methods(http.MethodGet)
 
 	router.HandleFunc("/v1/admin/users", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUserListHandler(listUseUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/admin/units", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUnitCreationHandler(createUnitUsecase)).ServeHTTP).Methods(http.MethodPost)
 	router.HandleFunc("/v1/admin/units", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUnitListHandler(listUnitUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/admin/tenants", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewTenantCreationHandler(createTenantUsecase)).ServeHTTP).Methods(http.MethodPost)
+	router.HandleFunc("/v1/admin/tenants", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewTenantListHandler(listTenantUsecase)).ServeHTTP).Methods(http.MethodGet)
 
 	// API to set user as SuperAdmin
 	router.HandleFunc("/v1/admin/set", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewSuperAdminHandler(superadminUC)).ServeHTTP).Methods(http.MethodPut)

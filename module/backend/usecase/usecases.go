@@ -49,6 +49,10 @@ type TenantCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateTenantRequest) (entity.Tenant, error)
 }
 
+type TenantListUsecase interface {
+	List(ctx context.Context, request request.ListTenantRequest) (response.ListTenantResponse, error)
+}
+
 type SuperadminUsecase interface {
 	SetUserAsSuperadmin(ctx context.Context, userID int) error
 }
