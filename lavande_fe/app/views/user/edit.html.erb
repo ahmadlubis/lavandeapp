@@ -1,0 +1,49 @@
+<h2>Edit</h2>
+
+<%= form_with model: @user, url: user_path(@user.id), method: :patch do |f| %>
+  <div class="field form-group">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :password, "New password" %>
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :password_confirmation, "New password confirmation" %><br />
+    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+  </div>
+
+  <br>
+
+  <div class="field form-group">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true, class: "form-control", autocomplete: "name" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :nik, "NIK" %><br />
+    <%= f.text_field :nik, autofocus: true, class: "form-control", autocomplete: "NIK" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :phone_no %><br />
+    <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no" %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= f.label :religion, "Agama" %><br /><br />
+    <%= f.select :religion, ["islam", "kristen", "buddha"], class: "form-select", id: "inputGroupSelect01" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Edit", class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<%= link_to "Back", :back %>
