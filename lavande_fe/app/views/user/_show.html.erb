@@ -1,0 +1,15 @@
+<div class="jumbotron">
+  <h1 class="display-4">
+    <%= @user.name %>
+    <%= @user.nik %>
+  </h1>
+  <p class="lead">
+    <%= @user.email %> | <%= @user.phone_no %> | <%= @user.religion %>
+  </p>
+  <hr class="my-4">
+  <div>
+    <%= link_to "Edit", edit_user_path(@user.id), class: "btn btn-secondary" %>
+    <%# <%= link_to "Back to rails ttrls", rails_ttrls_path, class: "btn btn-secondary" %> %>
+    <%# <%= button_to "Destroy this rails ttrl", @user, method: :delete, class: "btn btn-secondary"  %> %>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<h2>Sign up</h2>
+
+<%= form_with url: user_index_path do |f| %>
+  <div class="field form-group">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email", value: "resakemal@gmail.com" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, class: "form-control", autocomplete: "new-password", value: "123456123456" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", value: "123456123456" %>
+  </div>
+
+  <br>
+
+  <div class="field form-group">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true, class: "form-control", autocomplete: "name", value: "Resa" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :nik, "NIK" %><br />
+    <%= f.text_field :nik, autofocus: true, class: "form-control", autocomplete: "NIK", value: "1234567890000000" %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :phone_no %><br />
+    <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no", value: "0217333333" %>
+  </div>
+
+  <div class="input-group mb-3">
+    <%= f.label :religion, "Agama" %><br /><br />
+    <%= f.select :religion, ["islam", "kristen", "buddha"], class: "form-select", id: "inputGroupSelect01", value: "islam" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up", class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<%# <%= render "devise/shared/links" %> %>
