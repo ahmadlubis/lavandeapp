@@ -1,4 +1,11 @@
 class SessionsController < ApplicationController
+
+  def new
+    if logged_in
+      redirect_to user_index_path
+    end
+  end
+
   def create
     response = UserClient.new.login(params[:email], params[:password]) 
     unless response.nil?
