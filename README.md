@@ -17,4 +17,4 @@
 ## How To Run Frontend Service
 1. Navigate to `lavande_fe`
 2. Run `bundle install`
-2. Run `rails s`
+3. Run `rails s`
