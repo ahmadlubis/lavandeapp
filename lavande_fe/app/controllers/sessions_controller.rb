@@ -1,11 +1,10 @@
 class SessionsController < ApplicationController
   def create
-    token = UserClient.new.login(params[:email], params[:password]) 
-    unless token.nil?
-      cookies[:access_token] = token
+    response = UserClient.new.login(params[:email], params[:password]) 
+    unless response.nil?
       session[:is_logged_in] = true
-      # TODO: Set access token expiry
-      # cookies[:access_token] = { value: @response.parsed_response['access_token'], expires: Time.strptime(@response.parsed_response['expired_at']) }
+      # cookies[:access_token] = response['access_token']
+      cookies[:access_token] = { value: response['access_token'], expires: Time.parse(response['expired_at']) }
 
       # if params[:remember_name]
       #   cookies[:email] = user.email

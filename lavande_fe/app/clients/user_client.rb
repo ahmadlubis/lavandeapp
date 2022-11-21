@@ -7,7 +7,6 @@ class UserClient
   # Login
   # POST /v1/user/login
   def login(email, password) 
-    p "abc"
     @response = self.class.post(
       "/login",
       headers: {
@@ -19,8 +18,7 @@ class UserClient
       }.to_json
     )
     if @response.success?
-      p "bbbbbb"
-      @response.parsed_response['access_token']
+      @response.parsed_response
     else
       nil
     end
@@ -36,7 +34,8 @@ class UserClient
         "Authorization" => "Bearer %s" % token
       }
     )
-    unless @response.parsed_response.key?("error_message")
+    # unless @response.parsed_response.key?("error_message")
+    if @response.success?
       @response.parsed_response
     else
       nil
@@ -53,7 +52,8 @@ class UserClient
       },
       body: user_data.to_json
     )
-    unless @response.parsed_response.key?("error_message")
+    # unless @response.parsed_response.key?("error_message")
+    if @response.success?
       @response.parsed_response
     else
       nil
@@ -72,7 +72,8 @@ class UserClient
       },
       body: user_data.to_json
     )
-    unless @response.parsed_response.key?("error_message")
+    # unless @response.parsed_response.key?("error_message")
+    if @response.success?
       @response.parsed_response
     else
       nil
