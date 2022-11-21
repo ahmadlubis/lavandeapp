@@ -36,6 +36,7 @@ type UnitCreationUsecase interface {
 
 type UnitOwnerVerificationUsecase interface {
 	VerifyOwner(ctx context.Context, unitID, userID uint64) error
+	VerifyAnyOwner(ctx context.Context, userID uint64) error
 }
 
 type UnitUpdateUsecase interface {
