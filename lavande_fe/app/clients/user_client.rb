@@ -6,15 +6,15 @@ class UserClient
 
   # Login
   # POST /v1/user/login
-  def login(email, password) 
+  def login(input) 
     @response = self.class.post(
       "/login",
       headers: {
         "Content-Type" => "application/json"
       },
       body: {
-        "email": email,
-        "password": password
+        "email": input['email'],
+        "password": input['password']
       }.to_json
     )
     if @response.success?
@@ -74,10 +74,8 @@ class UserClient
     )
     # unless @response.parsed_response.key?("error_message")
     if @response.success?
-      p "aaaa"
       @response.parsed_response
     else
-      p "bbbb"
       nil
     end
   end

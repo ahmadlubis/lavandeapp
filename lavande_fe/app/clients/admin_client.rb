@@ -13,9 +13,9 @@ class AdminClient
             "Authorization" => "Bearer %s" % token
         },
         query: {
-            limit => 5,
-            offset => 5 * page
-        }
+            "limit" => 5,
+            "offset" => 5 * page
+        }.to_json
       )
       if @response.success?
         p @response.parsed_response

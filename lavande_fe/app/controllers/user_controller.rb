@@ -20,9 +20,7 @@ class UserController < ApplicationController
   end
 
   def create
-    user_data = params.as_json(:only => [:name, :nik, :email, :phone_no, :religion, :password])
-    result = UserClient.new.register(user_data)
-    # result = UserClient.new.register(user_params)
+    result = UserClient.new.register(user_params)
     unless result.nil?
       flash[:notice] = "Successfully registered user %s" % params[:name]
       redirect_to new_session_path
@@ -53,9 +51,8 @@ class UserController < ApplicationController
   def update
     token = cookies[:access_token]
     unless token.nil?
-      user_data = params[:user].as_json(:only => [:name, :nik, :email, :phone_no, :religion, :password])
-      result = UserClient.new.update(user_data, token)
-      # result = UserClient.new.update(user_params, token)
+      p user_params
+      result = UserClient.new.update(user_params, token)
       unless result.nil?
         flash[:notice] = "Successfully updated user data"
         redirect_to user_index_path

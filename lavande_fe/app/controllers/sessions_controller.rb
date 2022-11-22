@@ -7,10 +7,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    response = UserClient.new.login(params[:email], params[:password]) 
+    response = UserClient.new.login(session_params) 
     unless response.nil?
       session[:is_logged_in] = true
       # cookies[:access_token] = response['access_token']
+      p response['access_token']
       cookies[:access_token] = { value: response['access_token'], expires: Time.parse(response['expired_at']) }
 
       # if params[:remember_name]
@@ -30,13 +31,14 @@ class SessionsController < ApplicationController
   def destroy
     session[:is_logged_in] = false
     session[:user_id] = nil
+    session[:role] = nil
     cookies[:access_token] = nil
     redirect_to new_session_path
   end
   
   private
 
-  def user_params
+  def session_params
     params.require(:email)
     params.require(:password)
     params.permit(:email, :password)
