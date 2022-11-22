@@ -3,9 +3,10 @@ package model
 import "net/http"
 
 var (
-	InvalidTokenError = NewExpectedError("session expired, please login again", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
-	UserNotFoundError = NewExpectedError("user not found", "USER_NOT_FOUND", http.StatusNotFound, "")
-	ForbiddenError    = NewExpectedError("forbidden", "USER_FORBIDDEN", http.StatusForbidden, "")
+	InvalidTokenError       = NewExpectedError("session expired, please login again", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
+	UserNotFoundError       = NewExpectedError("user not found", "USER_NOT_FOUND", http.StatusNotFound, "")
+	ForbiddenError          = NewExpectedError("forbidden", "USER_FORBIDDEN", http.StatusForbidden, "")
+	DeactivatedAccountError = NewExpectedError("accounts deactivated", "USER_UNAUTHORIZED", http.StatusUnauthorized, "")
 )
 
 type RestError struct {

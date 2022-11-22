@@ -35,6 +35,10 @@ func (u *userTokenVerificationUsecase) VerifyToken(ctx context.Context, tokenStr
 		return entity.User{}, model.NewUnknownError(strconv.FormatUint(id, 10), err)
 	}
 
+	if user.Status == entity.UserStatusNonactive {
+		return entity.User{}, model.DeactivatedAccountError
+	}
+
 	return user, nil
 }
 

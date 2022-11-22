@@ -38,21 +38,20 @@ func (u User) Validate() error {
 	if match, _ := regexp.MatchString(emailRegex, u.Email); !match {
 		return model.NewExpectedError("email must be a valid email address", "USER_INVALID", http.StatusBadRequest, u.Email)
 	}
-	if len(u.Name) > 255 {
-		return model.NewExpectedError("name must be at most 255 characters long", "USER_INVALID", http.StatusBadRequest, u.Email)
+	if len(u.Name) == 0 || len(u.Name) > 255 {
+		return model.NewExpectedError("name must be present and at most 255 characters long", "USER_INVALID", http.StatusBadRequest, u.Email)
 	}
-	if len(u.NIK) > 0 {
-		if len(u.NIK) != 16 {
-			return model.NewExpectedError("NIK must be 16 characters long", "USER_INVALID", http.StatusBadRequest, u.Email)
-		}
-		if match, _ := regexp.MatchString(numbersOnlyRegex, u.NIK); !match {
-			return model.NewExpectedError("NIK must only consist of numbers", "USER_INVALID", http.StatusBadRequest, u.Email)
-		}
+	if len(u.NIK) != 16 {
+		return model.NewExpectedError("NIK must be present and 16 characters long", "USER_INVALID", http.StatusBadRequest, u.Email)
 	}
-	if len(u.PhoneNo) > 0 {
-		if match, _ := regexp.MatchString(phoneNoRegex, u.PhoneNo); !match {
-			return model.NewExpectedError("phone_no must be a valid phone number", "USER_INVALID", http.StatusBadRequest, u.Email)
-		}
+	if match, _ := regexp.MatchString(numbersOnlyRegex, u.NIK); !match {
+		return model.NewExpectedError("NIK must only consist of numbers", "USER_INVALID", http.StatusBadRequest, u.Email)
+	}
+	if len(u.PhoneNo) == 0 {
+		return model.NewExpectedError("phone_no must be present", "USER_INVALID", http.StatusBadRequest, u.Email)
+	}
+	if match, _ := regexp.MatchString(phoneNoRegex, u.PhoneNo); !match {
+		return model.NewExpectedError("phone_no must be a valid phone number", "USER_INVALID", http.StatusBadRequest, u.Email)
 	}
 
 	return nil

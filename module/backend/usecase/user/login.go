@@ -35,6 +35,10 @@ func (u *userLoginUsecase) Login(ctx context.Context, req request.LoginUserReque
 		return model.AccessToken{}, model.NewUnknownError(req.Email, err)
 	}
 
+	if user.Status == entity.UserStatusNonactive {
+		return model.AccessToken{}, model.DeactivatedAccountError.WithTrackId(req.Email)
+	}
+
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(req.Password)); err != nil {
 		return model.AccessToken{}, invalidLoginError
 	}

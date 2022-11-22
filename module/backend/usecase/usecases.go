@@ -23,6 +23,7 @@ type UserTokenVerificationUsecase interface {
 
 type UserUpdateUsecase interface {
 	Update(ctx context.Context, request request.UpdateUserRequest) (entity.User, error)
+	AdminUpdate(ctx context.Context, request request.AdminUpdateUserRequest) (entity.User, error)
 }
 
 type UserListUsecase interface {
@@ -35,6 +36,7 @@ type UnitCreationUsecase interface {
 
 type UnitOwnerVerificationUsecase interface {
 	VerifyOwner(ctx context.Context, unitID, userID uint64) error
+	VerifyAnyOwner(ctx context.Context, userID uint64) error
 }
 
 type UnitUpdateUsecase interface {

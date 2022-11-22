@@ -15,13 +15,18 @@ type LoginUserRequest struct {
 }
 
 type UpdateUserRequest struct {
-	TargetEmail string `json:"target_email"`
-	Name        string `json:"name"`
-	NIK         string `json:"nik"`
-	Email       string `json:"email"`
-	PhoneNo     string `json:"phone_no"`
-	Religion    string `json:"religion"`
-	Password    string `json:"password"`
+	TargetEmail string  `json:"target_email"`
+	Name        *string `json:"name"`
+	NIK         *string `json:"nik"`
+	Email       *string `json:"email"`
+	PhoneNo     *string `json:"phone_no"`
+	Religion    *string `json:"religion"`
+	Password    *string `json:"password"`
+}
+
+type AdminUpdateUserRequest struct {
+	TargetId uint64  `json:"target_id"`
+	Status   *string `json:"status"`
 }
 
 type ListUserRequest struct {
