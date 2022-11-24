@@ -7,7 +7,7 @@ class UserClient
   # Login
   # POST /v1/user/login
   def login(input) 
-    @response = self.class.post(
+    self.class.post(
       "/login",
       headers: {
         "Content-Type" => "application/json"
@@ -17,17 +17,17 @@ class UserClient
         "password": input['password']
       }.to_json
     )
-    if @response.success?
-      @response.parsed_response
-    else
-      nil
-    end
+    # if @response.success?
+    #   @response.parsed_response
+    # else
+    #   nil
+    # end
   end
 
   # Get user info
   # GET /v1/user/index
   def get(token)
-    @response = self.class.get(
+    self.class.get(
       "/me",
       headers: {
         "Content-Type" => "application/json",
@@ -35,17 +35,17 @@ class UserClient
       }
     )
     # unless @response.parsed_response.key?("error_message")
-    if @response.success?
-      @response.parsed_response
-    else
-      nil
-    end
+    # if @response.success?
+    #   @response.parsed_response
+    # else
+    #   nil
+    # end
   end
 
   # Register user
   # POST /v1/user/index
   def register(user_data)
-    @response = self.class.post(
+    self.class.post(
       "/register",
       headers: {
         "Content-Type" => "application/json",
@@ -53,18 +53,17 @@ class UserClient
       body: user_data.to_json
     )
     # unless @response.parsed_response.key?("error_message")
-    if @response.success?
-      @response.parsed_response
-    else
-      nil
-    end
+    # if @response.success?
+    #   @response.parsed_response
+    # else
+    #   @response.parsed_response["error_message"]
+    # end
   end
 
   # Update user data
   # PATCH /v1/user/
   def update(user_data, token)
-    p user_data
-    @response = self.class.patch(
+    self.class.patch(
       "/me",
       headers: {
         "Content-Type" => "application/json",
@@ -72,11 +71,10 @@ class UserClient
       },
       body: user_data.to_json
     )
-    # unless @response.parsed_response.key?("error_message")
-    if @response.success?
-      @response.parsed_response
-    else
-      nil
-    end
+    # if @response.success?
+    #   @response.parsed_response
+    # else
+    #   nil
+    # end
   end
 end

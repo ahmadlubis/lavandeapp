@@ -1,17 +1,6 @@
 <h2>Edit</h2>
 
-<%= form_with model: @user, url: user_path(@user.id), method: :patch do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this update from being saved:</h2>
-      <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  
+<%= form_with model: @user, url: user_path(@user.id), method: :patch do |f| %>  
   <div class="field form-group">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email" %>
@@ -19,9 +8,6 @@
 
   <div class="field form-group">
     <%= f.label :password, "New password" %>
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
     <%= f.password_field :password, class: "form-control", autocomplete: "password" %>
   </div>
 
@@ -49,7 +35,7 @@
 
   <div class="input-group mb-3">
     <%= f.label :religion, "Agama" %><br /><br />
-    <%= f.select :religion, ["islam", "kristen", "buddha"], class: "form-select", id: "inputGroupSelect01" %>
+    <%= f.select :religion, ["islam", "protestant", "catholic", "hindu", "buddha", "confucius", "others"], class: "form-select", id: "inputGroupSelect01" %>
   </div>
 
   <div class="actions">

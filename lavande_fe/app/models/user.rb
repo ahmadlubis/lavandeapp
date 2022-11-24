@@ -10,6 +10,22 @@ class User
     validates :email, presence: true, length: {in:5..255}
     validates :phone_no, presence: true
     validates :religion, presence: true
+
+    def initialize(attributes={})
+      super
+      @role ||= "resident"
+      @status ||= "active"
+    end
+
+    def public_attributes
+      {
+        'name' => @name,
+        'nik' => @nik,
+        'email' => @email,
+        'phone_no' => @phone_no,
+        'religion' => @religion,
+      }
+    end
   
     def persisted?
       true
