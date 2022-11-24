@@ -22,9 +22,9 @@
     <td><%= user.role %></td>
     <td>
       <% if user.status == 'active' %>
-        <%= button_to "Nonaktifkan", admin_status_path(user.id), params: { action: 'deactivate' }, class:"btn btn-outline-danger" %>
+        <%= button_to "Nonaktifkan", admin_status_path(user.id), method: :patch, params: { status: 'nonactive', name: user.name }, class:"btn btn-outline-danger" %>
       <% else %>
-        <%= button_to "Aktifkan", admin_status_path(user.id), params: { action: 'activate' }, class:"btn btn-outline-success" %>
+        <%= button_to "Aktifkan", admin_status_path(user.id), method: :patch, params: { status: 'active', name: user.name }, class:"btn btn-outline-success" %>
       <% end %>
     </td>
   </tr>

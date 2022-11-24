@@ -45,16 +45,29 @@ class AdminController < ApplicationController
     #   # redirect_to admin_index_path
     #   redirect_back(fallback_location: admin_index_path)
     # end
-    result = AdminClient.new.change_status(@token, params[:id], params[:action])
-      unless result.nil?
-        flash[:notice] = "Successfully updated user status"
-        # redirect_to admin_index_path
-        redirect_back(fallback_location: admin_index_path)
-      else
-        flash[:alert] = "An error occurred when updating user status"
-        redirect_back(fallback_location: admin_index_path)
-      end
+    status_data = status_params
+    status_data[:target_id] = status_data[:target_id].to_i
+    result = AdminClient.new.change_status(@token, status_data)
+    # unless result.nil?
+    #   flash[:notice] = "Successfully updated user status"
+    #   # redirect_to admin_index_path
+    #   redirect_back(fallback_location: admin_index_path)
+    # else
+    #   flash[:alert] = "An error occurred when updating user status"
+    #   redirect_back(fallback_location: admin_index_path)
+    # end
+    if result.success?
+      redirect_back fallback_location: admin_index_path, notice: "Successfully updated user status of %s" % params[:name]
+    else
+      err_msg = result.parsed_response['error_message']
+      redirect_back fallback_location: admin_index_path, alert: "An error occurred when updating user status: %s" % err_msg
+    end
   end
 
   private
+
+  def status_params
+    params.require([:target_id, :status])
+    params.permit(:target_id, :status)
+  end
 end

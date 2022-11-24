@@ -10,12 +10,12 @@ class AdminClient
       @response = self.class.get(
         "/users",
         headers: {
-            "Authorization" => "Bearer %s" % token
+          "Authorization" => "Bearer %s" % token
         },
         query: {
-            "limit" => 5,
-            "offset" => 5 * page,
-            "name" => search
+          "limit" => 5,
+          "offset" => 5 * page,
+          "name" => search
         }
       )
       if @response.success?
@@ -28,22 +28,20 @@ class AdminClient
 
     # Change user status
     # PATCH /v1/admin/users
-    def change_status(token, user_id, action) 
-      @response = self.class.patch(
+    def change_status(token, status_data) 
+      self.class.patch(
         "/users",
         headers: {
-            "Authorization" => "Bearer %s" % token
+          "Content-Type" => "application/json",
+          "Authorization" => "Bearer %s" % token
         },
-        body: {
-            "target_id" => user_id,
-            "action" => action
-        }.to_json
+        body: status_data.to_json
       )
-      if @response.success?
-        p @response.parsed_response
-        @response.parsed_response
-      else
-        nil
-      end
+      # if @response.success?
+      #   p @response.parsed_response
+      #   @response.parsed_response
+      # else
+      #   nil
+      # end
     end
 end
