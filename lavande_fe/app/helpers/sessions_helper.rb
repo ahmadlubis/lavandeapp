@@ -2,6 +2,7 @@ module SessionsHelper
    # Returns true if the user is logged in, false otherwise.
    def logged_in
       session[:is_logged_in] == true
+      #  && !get_user_id().nil?
    end
 
    def get_user_id

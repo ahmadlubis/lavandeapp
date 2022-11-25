@@ -4,10 +4,16 @@ class ApplicationController < ActionController::Base
     private
 
     def check_session
-        token = cookies[:access_token]
+        # Check for token in session and cookie
+        # token = cookies[:access_token]
+        token = session[:access_token]
+        if token.nil?
+            token = cookies[:access_token]
+        end
+        
         if token.nil?
             session[:is_logged_in] = false
-            flash[:alert] = "Please log in"
+            # flash[:alert] = "Please log in"
             redirect_to new_session_path
         else
             @token = token

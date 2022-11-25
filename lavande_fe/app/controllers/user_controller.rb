@@ -31,12 +31,12 @@ class UserController < ApplicationController
       @user = User.new(user_data)
     else
       err_msg = result.parsed_response['error_message']
-      redirect_to new_session_path, alert: "An error occured: %s, please login again" % err_msg
+      redirect_to new_session_path, alert: "An error occured: %s" % err_msg
     end
   end
 
   def new
-    if !session[:user_data].nil?
+    unless session[:user_data].nil?
       session[:user_data].as_json().each do |name, value|
         params[name] = value
       end
