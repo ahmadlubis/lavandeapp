@@ -1,11 +1,19 @@
 <h1>Users List</h1>
-<%= form_tag admin_index_path, :method => "get" do %>
-  <%= label_tag(:search, "Name") %>
-  <%= text_field_tag :search, params[:search] %>
-  <%= submit_tag("Search", :name => nil) %>
+
+<%= form_with url: admin_index_path, method: :get, class:"row g-3" do |f| %>
+  <div class="col-auto">
+    <%= f.label :search, "Name", class: "form-control-plaintext" %>
+  </div>
+  <div class="col-auto">
+    <%= f.text_field :search, class:"form-control", value: params[:search] %>
+  </div>
+  <div class="col-auto">
+    <%= f.submit "Search", :name => nil, class: "btn btn-primary" %>
+  </div>
 <% end %>
 <br>
-<% if !@users.empty? %>
+
+<% unless @users.empty? %>
   <table>
   <tr>
     <th>Name </th>

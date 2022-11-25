@@ -7,7 +7,7 @@ class AdminClient
     # Users list
     # POST /v1/admin/users
     def get_users(token, search, page) 
-      @response = self.class.get(
+      self.class.get(
         "/users",
         headers: {
           "Authorization" => "Bearer %s" % token
@@ -18,12 +18,12 @@ class AdminClient
           "name" => search
         }
       )
-      if @response.success?
-        p @response.parsed_response['data']
-        @response.parsed_response['data']
-      else
-        nil
-      end
+      # if @response.success?
+      #   p @response.parsed_response['data']
+      #   @response.parsed_response['data']
+      # else
+      #   nil
+      # end
     end
 
     # Change user status
@@ -40,6 +40,28 @@ class AdminClient
       # if @response.success?
       #   p @response.parsed_response
       #   @response.parsed_response
+      # else
+      #   nil
+      # end
+    end
+
+    # Units list
+    # POST /v1/admin/units
+    def get_units(token, unit_data, page) 
+      query = {
+        "limit" => 5,
+        "offset" => 5 * page
+      }.merge(unit_data)
+      self.class.get(
+        "/units",
+        headers: {
+          "Authorization" => "Bearer %s" % token
+        },
+        query: query
+      )
+      # if @response.success?
+      #   p @response.parsed_response['data']
+      #   @response.parsed_response['data']
       # else
       #   nil
       # end

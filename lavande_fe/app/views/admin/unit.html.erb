@@ -1,0 +1,30 @@
+<h1>Unit</h1>
+
+<%= form_with url: admin_unit_path, method: :get do |f| %>
+  <div class="row g-4">
+    <div class="col-auto">
+        <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, class: "form-select" %>
+    </div>
+    <div class="col-auto">
+        <%= f.select :floor, [1, 2, 3], { prompt: "Floor", selected: params[:floor] }, class: "form-select" %>
+    </div>
+    <% if !params[:tower].nil? && !params[:floor].nil? && !@units.empty? %>
+      <div class="col-auto">
+          <%= f.select :unit, @units, { prompt: "Unit", selected: params[:unit] }, class: "form-select" %>
+      </div>
+    <% end %>
+    <div class="col-auto">
+        <%= f.submit "Search", :name => nil, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<br>
+<% unless @cur_unit.nil? %>
+  <p>Gov ID: <%= @cur_unit['gov_id'] %></p>
+  <p>Tower <%= @cur_unit['tower'] %> / Floor <%= @cur_unit['floor'] %> / Unit No. <%= @cur_unit['unit_no'] %></p>
+<% end %>
+
+<% if (!params[:tower].nil? && !params[:floor].nil?) && @units.empty? && @cur_unit.nil? %>
+  <p>Tidak ada unit yang sesuai</p>
+<% end %>
