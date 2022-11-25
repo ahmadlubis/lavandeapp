@@ -67,21 +67,8 @@ class AdminController < ApplicationController
   end
 
   def unit
-    # unless session[:tower].nil?
-    #   params[:tower] = session[:tower]
-    #   session.delete(:tower)
-    # end
-    # unless session[:floor].nil?
-    #   params[:floor] = session[:floor]
-    #   session.delete(:floor)
-    # end
-
     unit_input = params
     if !unit_input[:tower].nil? && !unit_input[:floor].nil? && !unit_input[:unit].nil?
-      # session[:tower] = unit_input[:tower]
-      # session[:floor] = unit_input[:floor]
-      # session[:unit] = unit_input[:unit]
-
       result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor, :unit), 0)
       if result.success?
         # @units ||= session[:units]
@@ -92,9 +79,6 @@ class AdminController < ApplicationController
         redirect_back fallback_location: admin_unit_path, alert: "An error occurred when fetching units: %s" % err_msg
       end
     elsif !unit_input[:tower].nil? && !unit_input[:floor].nil?
-      # session[:tower] = unit_input[:tower]
-      # session[:floor] = unit_input[:floor]
-
       result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor), 0)
       if result.success?
         @units ||= []
@@ -109,6 +93,27 @@ class AdminController < ApplicationController
     end
   end
 
+  def unit_new
+    unless session[:unit_data].nil?
+      session[:unit_data].as_json().each do |name, value|
+        params[name] = value
+      end
+      session.delete(:unit_data)
+    end
+  end
+
+  def unit_create
+    unit_data = create_unit_params
+    session[:unit_data] = unit_data
+    result = AdminClient.new.create_unit(@token, unit_data)
+    if result.success?
+      redirect_to admin_unit_path, notice: "Successfully created unit %s" % unit_data[:gov_id]
+    else
+      err_msg = result.parsed_response['error_message']
+      redirect_back fallback_location: admin_unit_path, alert: "An error occurred when creating unit: %s" % err_msg
+    end
+  end
+
   private
 
   def status_params
@@ -120,4 +125,9 @@ class AdminController < ApplicationController
   #   params.require([:tower, :floor])
   #   params.permit(:tower, :floor)
   # end
+
+  def create_unit_params
+    params.require([:gov_id, :tower, :floor, :unit_no])
+    params.permit(:gov_id, :tower, :floor, :unit_no)
+  end
 end

@@ -66,4 +66,17 @@ class AdminClient
       #   nil
       # end
     end
+
+    # Create unit
+    # POST /v1/admin/units
+    def create_unit(token, unit_data)
+      self.class.post(
+        "/units",
+        headers: {
+          "Content-Type" => "application/json",
+          "Authorization" => "Bearer %s" % token
+        },
+        body: unit_data.to_json
+      )
+    end
 end

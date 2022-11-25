@@ -1,0 +1,30 @@
+<h2>Buat Unit</h2>
+
+<%= form_with url: admin_unit_path do |f| %>
+  <div class="field form-group">
+    <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
+    <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :tower, class: "form-label" %><br />
+    <%= f.text_field :tower, autofocus: true, class: "form-control", autocomplete: "name", value: params[:tower] %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :floor, class: "form-label" %><br />
+    <%= f.text_field :floor, autofocus: true, class: "form-control", autocomplete: "NIK", value: params[:floor] %>
+  </div>
+
+  <div class="field form-group">
+    <%= f.label :unit_no, "Unit Number", class: "form-label" %><br />
+    <%= f.text_field :unit_no, autofocus: true, class: "form-control", autocomplete: "unit_no", value: params[:unit_no] %>
+  </div>
+
+  <br>
+  <div class="actions">
+    <%= f.submit "Create", class: "btn btn-secondary" %>
+  </div>
+<% end %>
+
+<%# <%= render "devise/shared/links" %> %>
