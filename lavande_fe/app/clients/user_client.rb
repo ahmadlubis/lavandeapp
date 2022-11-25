@@ -17,11 +17,6 @@ class UserClient
         "password": input['password']
       }.to_json
     )
-    # if @response.success?
-    #   @response.parsed_response
-    # else
-    #   nil
-    # end
   end
 
   # Get user info
@@ -34,12 +29,6 @@ class UserClient
         "Authorization" => "Bearer %s" % token
       }
     )
-    # unless @response.parsed_response.key?("error_message")
-    # if @response.success?
-    #   @response.parsed_response
-    # else
-    #   nil
-    # end
   end
 
   # Register user
@@ -52,12 +41,6 @@ class UserClient
       },
       body: user_data.to_json
     )
-    # unless @response.parsed_response.key?("error_message")
-    # if @response.success?
-    #   @response.parsed_response
-    # else
-    #   @response.parsed_response["error_message"]
-    # end
   end
 
   # Update user data
@@ -71,10 +54,5 @@ class UserClient
       },
       body: user_data.to_json
     )
-    # if @response.success?
-    #   @response.parsed_response
-    # else
-    #   nil
-    # end
   end
 end

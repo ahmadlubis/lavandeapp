@@ -18,12 +18,6 @@ class AdminClient
           "name" => search
         }
       )
-      # if @response.success?
-      #   p @response.parsed_response['data']
-      #   @response.parsed_response['data']
-      # else
-      #   nil
-      # end
     end
 
     # Change user status
@@ -37,12 +31,6 @@ class AdminClient
         },
         body: status_data.to_json
       )
-      # if @response.success?
-      #   p @response.parsed_response
-      #   @response.parsed_response
-      # else
-      #   nil
-      # end
     end
 
     # Units list
@@ -59,12 +47,6 @@ class AdminClient
         },
         query: query
       )
-      # if @response.success?
-      #   p @response.parsed_response['data']
-      #   @response.parsed_response['data']
-      # else
-      #   nil
-      # end
     end
 
     # Create unit
