@@ -10,15 +10,15 @@ import (
 	"net/http"
 )
 
-type unitUpdateHandler struct {
+type userUpdateHandler struct {
 	usecase usecase.UserUpdateUsecase
 }
 
 func NewUserUpdateHandler(usecase usecase.UserUpdateUsecase) handler.Handler {
-	return &unitUpdateHandler{usecase: usecase}
+	return &userUpdateHandler{usecase: usecase}
 }
 
-func (h *unitUpdateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
+func (h *userUpdateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	reqBody, _ := io.ReadAll(r.Body)
 
 	var req request.AdminUpdateUserRequest

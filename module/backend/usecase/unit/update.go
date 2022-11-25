@@ -32,15 +32,31 @@ func (u *unitUpdateUsecase) Update(_ context.Context, req request.UpdateUnitRequ
 
 	var err error
 	var ajb, akte []byte
-	if ajb, err = base64.StdEncoding.DecodeString(req.AJB); err != nil {
-		return entity.Unit{}, model.NewExpectedError("ajb is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, strconv.FormatUint(req.ID, 10))
+	if req.GovID != nil {
+		unit.GovID = *req.GovID
 	}
-	if akte, err = base64.StdEncoding.DecodeString(req.Akte); err != nil {
-		return entity.Unit{}, model.NewExpectedError("akte is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, strconv.FormatUint(req.ID, 10))
+	if req.Tower != nil {
+		unit.Tower = *req.Tower
+	}
+	if req.Floor != nil {
+		unit.Floor = *req.Floor
+	}
+	if req.UnitNo != nil {
+		unit.UnitNo = *req.UnitNo
+	}
+	if req.AJB != nil {
+		if ajb, err = base64.StdEncoding.DecodeString(*req.AJB); err != nil {
+			return entity.Unit{}, model.NewExpectedError("ajb is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, strconv.FormatUint(req.ID, 10))
+		}
+		unit.AJB = ajb
+	}
+	if req.Akte != nil {
+		if akte, err = base64.StdEncoding.DecodeString(*req.Akte); err != nil {
+			return entity.Unit{}, model.NewExpectedError("akte is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, strconv.FormatUint(req.ID, 10))
+		}
+		unit.Akte = akte
 	}
 
-	unit.AJB = ajb
-	unit.Akte = akte
 	if err := unit.Validate(); err != nil {
 		return entity.Unit{}, err
 	}

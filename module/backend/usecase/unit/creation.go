@@ -2,7 +2,6 @@ package unit
 
 import (
 	"context"
-	"encoding/base64"
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -22,24 +21,13 @@ func NewUnitCreationUsecase(db *gorm.DB) usecase.UnitCreationUsecase {
 }
 
 func (u *unitCreationUsecase) Create(_ context.Context, req request.CreateUnitRequest) (entity.Unit, error) {
-	var err error
-	var ajb, akte []byte
-
-	if ajb, err = base64.StdEncoding.DecodeString(req.AJB); err != nil {
-		return entity.Unit{}, model.NewExpectedError("ajb is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, req.GovID)
-	}
-	if akte, err = base64.StdEncoding.DecodeString(req.Akte); err != nil {
-		return entity.Unit{}, model.NewExpectedError("akte is not a valid base64 string", "UNIT_INVALID", http.StatusBadRequest, req.GovID)
-	}
 	unit := entity.Unit{
 		GovID:  req.GovID,
 		Tower:  req.Tower,
 		Floor:  req.Floor,
 		UnitNo: req.UnitNo,
-		AJB:    ajb,
-		Akte:   akte,
 	}
-	if err = unit.Validate(); err != nil {
+	if err := unit.Validate(); err != nil {
 		return entity.Unit{}, err
 	}
 

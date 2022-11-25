@@ -1,8 +1,7 @@
-package unit
+package admin
 
 import (
 	"encoding/json"
-	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/handler"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -12,41 +11,28 @@ import (
 )
 
 type unitUpdateHandler struct {
-	validator usecase.UnitOwnerVerificationUsecase
-	usecase   usecase.UnitUpdateUsecase
+	usecase usecase.UnitUpdateUsecase
 }
 
-func NewUnitUpdateHandler(validator usecase.UnitOwnerVerificationUsecase, usecase usecase.UnitUpdateUsecase) handler.Handler {
-	return &unitUpdateHandler{
-		validator: validator,
-		usecase:   usecase,
-	}
+func NewUnitUpdateHandler(usecase usecase.UnitUpdateUsecase) handler.Handler {
+	return &unitUpdateHandler{usecase: usecase}
 }
 
 func (h *unitUpdateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
-	temp := r.Context().Value(handler.RequestSubjectContextKey)
-	var user, ok = temp.(entity.User)
-	if !ok {
-		return model.InvalidTokenError
-	}
-
 	reqBody, _ := io.ReadAll(r.Body)
-	var req request.UserUpdateUnitRequest
+
+	var req request.AdminUpdateUnitRequest
 	err := json.Unmarshal(reqBody, &req)
 	if err != nil {
 		return model.NewExpectedError("bad request format", "UNIT_INVALID", http.StatusBadRequest, "")
 	}
 
-	// Verify that requester is the owner of target Unit
-	err = h.validator.VerifyOwner(r.Context(), req.ID, user.ID)
-	if err != nil {
-		return err
-	}
-
 	unit, err := h.usecase.Update(r.Context(), request.UpdateUnitRequest{
-		ID:   req.ID,
-		AJB:  req.AJB,
-		Akte: req.Akte,
+		ID:     req.ID,
+		GovID:  req.GovID,
+		Tower:  req.Tower,
+		Floor:  req.Floor,
+		UnitNo: req.UnitNo,
 	})
 	if err != nil {
 		return err
