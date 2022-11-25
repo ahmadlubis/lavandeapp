@@ -33,11 +33,12 @@
     <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no" %>
   </div>
 
-  <div class="input-group mb-3">
-    <%= f.label :religion, "Agama" %><br /><br />
-    <%= f.select :religion, ["islam", "protestant", "catholic", "hindu", "buddha", "confucius", "others"], class: "form-select", id: "inputGroupSelect01" %>
+  <div class="field form-group">
+    <%= f.label :religion, "Agama" %>
+    <%= f.select :religion, ["islam", "protestant", "catholic", "hindu", "buddha", "confucius", "others"], {}, class: "form-select", id: "inputGroupSelect01" %>
   </div>
-
+  
+  <br>
   <div class="actions">
     <%= f.submit "Edit", class: "btn btn-secondary" %>
   </div>
