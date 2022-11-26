@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unit List by Owner</title>
+  </head>
+  <body>
+    <%= form_with url: unit_index_path, method: :get do |f| %>
+      <div class="row">
+        <div class="col">
+          <label for="tower">Tower</label>
+          <%= f.select :tower, ["", "A", "B", "C"], { selected: params[:tower] }, class: "form-select mt-1" %>
+        </div>
+        <div class="col">
+          <label for="floor">Floor</label>
+          <%= f.select :floor, ["", "1", "2", "3"], { selected: params[:floor] }, class: "form-select mt-1" %>
+        </div>
+      </div>
+      <% if @err_msg %>
+        <div class="alert alert-danger mt-2" role="alert">
+          <%= @err_msg %>
+        </div>
+      <% end %>
+      <%= f.submit "Search", :name => nil, class: "btn btn-primary mt-3" %>
+    <% end %>
+
+    <table class="table mt-5">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Gov ID</th>
+        <th scope="col">Tower</th>
+        <th scope="col">Floor</th>
+        <th scope="col">Unit No</th>
+        <th scope="col">AJB</th>
+        <th scope="col">Akte</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if @result %>
+      <% @result["data"].each_with_index do |val, i| %>
+      <tr>
+        <th scope="row"><%= i + 1 %></th>
+        <td><%= val["gov_id"] %></td>
+        <td><%= val["tower"] %></td>
+        <td><%= val["floor"] %></td>
+        <td><%= val["unit_no"] %></td>
+        <td>
+          <% if val["ajb"].present? %>
+            <a href="data:image/png;base64,<%= val["ajb"] %>" download="ajb-<%= val["gov_id"] %>-.pdf">
+            <button type="button" class="btn btn-info">Download</button>
+            </a>
+          <% else %>
+            <button type="button" class="btn btn-dark disabled">No File</button>
+          <% end %>
+        </td>
+        <td>
+          <% if val["akte"].present? %>
+            <a href="data:image/png;base64,<%= val["akte"] %>" download="akte-<%= val["gov_id"] %>-.pdf">
+              <button type="button" class="btn btn-info">Download</button>
+            </a>
+          <% else %>
+            <button type="button" class="btn btn-dark disabled">No File</button>
+          <% end %>
+        </td>
+        <td>
+          <a href="">
+            <button type="button" class="btn btn-info">View Tenants</button>
+          </a>
+          <a href="">
+            <button type="button" class="btn btn-primary">Edit Unit</button>
+          </a>
+        </td>
+      </tr>
+      <% end %>
+      <% end %>
+      </tbody>
+    </table>
+
+    <% if @result %>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
+        <% (1..(@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil).each do |v| %>
+        <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+        <% end %>
+        <li class="page-item"><a class="page-link <% if params[:page] == (@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
+      </ul>
+    </nav>
+    <% end %>
+  </body>
+</html>
+
+<script>
+  var elements = document.getElementsByClassName("page-link");
+
+  var myFunction = function() {
+      var attribute = this.getAttribute("page");
+      var params = (new URL(document.location)).searchParams;
+      params.set("page", attribute)
+      window.location.href = window.location.pathname + "?" + params.toString()
+  };
+
+  for (var i = 0; i < elements.length; i++) {
+      elements[i].addEventListener('click', myFunction, false);
+  }
+</script>

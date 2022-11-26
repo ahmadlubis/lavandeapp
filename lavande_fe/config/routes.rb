@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   resources :admin, only: :index
   resources :sessions
   resources :user
+  resources :unit, only: [:index, :show, :update] do
+    resources :tenant, only: [:index, :create]
+  end
 
   patch '/admin/:target_id/status', to: 'admin#status', as: 'admin_status'
   get '/admin/unit', to: 'admin#unit'
