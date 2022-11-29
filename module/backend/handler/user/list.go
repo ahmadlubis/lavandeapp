@@ -35,16 +35,22 @@ func (h *userListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) erro
 
 	query := r.URL.Query()
 
-	limit, err := strconv.ParseUint(query.Get("limit"), 10, 64)
+	var id, limit, offset uint64
+
+	if id, err = strconv.ParseUint(query.Get("id"), 10, 64); err != nil {
+		id = 0
+	}
+	limit, err = strconv.ParseUint(query.Get("limit"), 10, 64)
 	if err != nil {
 		return model.NewExpectedError("limit must be a number", "USER_INVALID", http.StatusBadRequest, "")
 	}
-	offset, err := strconv.ParseUint(query.Get("offset"), 10, 64)
+	offset, err = strconv.ParseUint(query.Get("offset"), 10, 64)
 	if err != nil {
 		return model.NewExpectedError("offset must be a number", "USER_INVALID", http.StatusBadRequest, "")
 	}
 
 	req := request.ListUserRequest{
+		ID:     id,
 		Name:   query.Get("name"),
 		Email:  query.Get("email"),
 		Limit:  limit,

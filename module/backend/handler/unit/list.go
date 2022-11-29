@@ -28,7 +28,7 @@ func (h *unitListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) erro
 
 	query := r.URL.Query()
 
-	var limit, offset uint64
+	var id, limit, offset uint64
 	var err error
 	if limit, err = strconv.ParseUint(query.Get("limit"), 10, 64); err != nil {
 		return model.NewExpectedError("limit must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
@@ -36,9 +36,13 @@ func (h *unitListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) erro
 	if offset, err = strconv.ParseUint(query.Get("offset"), 10, 64); err != nil {
 		return model.NewExpectedError("offset must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
 	}
+	if id, err = strconv.ParseUint(query.Get("id"), 10, 64); err != nil {
+		id = 0
+	}
 
 	// FORCE filter by current_user owned units
 	req := request.ListUnitRequest{
+		ID:      id,
 		OwnerID: user.ID,
 		GovID:   query.Get("gov_id"),
 		Tower:   query.Get("tower"),

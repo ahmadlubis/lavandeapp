@@ -38,6 +38,10 @@ func (u *unitListUsecase) List(ctx context.Context, request request.ListUnitRequ
 	// Build WHERE query and its parameters
 	var conditions []string
 	var params []interface{}
+	if req.ID != 0 {
+		conditions = append(conditions, "id = ?")
+		params = append(params, req.ID)
+	}
 	if req.OwnerID != 0 {
 		unitIDs, err := u.getOwnedUnitIDs(ctx, req.OwnerID)
 		if err != nil {

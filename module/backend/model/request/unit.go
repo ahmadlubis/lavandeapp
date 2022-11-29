@@ -32,6 +32,7 @@ type UpdateUnitRequest struct {
 }
 
 type ListUnitRequest struct {
+	ID      uint64 `json:"id"`
 	OwnerID uint64 `json:"owner_id"`
 	GovID   string `json:"gov_id"`
 	Tower   string `json:"tower"`

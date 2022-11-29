@@ -17,6 +17,7 @@ const (
 )
 
 type listUserRequest struct {
+	ID       uint64
 	Name     string
 	NIK      string
 	Email    string
@@ -47,6 +48,10 @@ func (u *userListUsecase) List(ctx context.Context, request request.ListUserRequ
 	// Build WHERE query and its parameters
 	var conditions []string
 	var params []interface{}
+	if req.ID != 0 {
+		conditions = append(conditions, "id = ?")
+		params = append(params, req.ID)
+	}
 	if req.Name != "" {
 		conditions = append(conditions, "name LIKE ?")
 		params = append(params, req.Name+"%")
@@ -124,6 +129,7 @@ func (u *userListUsecase) normalizeListRequest(req request.ListUserRequest) (lis
 	}
 
 	return listUserRequest{
+		ID:       req.ID,
 		Name:     req.Name,
 		NIK:      req.NIK,
 		Email:    req.Email,

@@ -30,6 +30,7 @@ type AdminUpdateUserRequest struct {
 }
 
 type ListUserRequest struct {
+	ID       uint64 `json:"id"`
 	Name     string `json:"name"`
 	NIK      string `json:"nik"`
 	Email    string `json:"email"`

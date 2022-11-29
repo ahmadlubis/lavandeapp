@@ -66,12 +66,7 @@
           <% end %>
         </td>
         <td>
-          <a href="">
-            <button type="button" class="btn btn-info">View Tenants</button>
-          </a>
-          <a href="">
-            <button type="button" class="btn btn-primary">Edit Unit</button>
-          </a>
+          <%= button_to "Edit Unit", unit_path(val["id"]), method: :get, class:"btn btn-primary" %>
         </td>
       </tr>
       <% end %>

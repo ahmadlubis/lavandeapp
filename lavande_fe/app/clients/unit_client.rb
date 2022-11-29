@@ -10,10 +10,36 @@ class UnitClient
   end
 
   # List by owners
-  # GET /v1/user/index
+  # GET /v1/unit
   def index(query)
     self.class.get(
-      "/",
+      "",
+      query: query,
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      }
+    )
+  end
+
+  # Update by owners
+  # PATCH /v1/unit
+  def update(payload)
+    self.class.patch(
+      "",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      },
+      body: payload.to_json
+    )
+  end
+
+  # List tenatn by owners
+  # GET /v1/unit/tenant
+  def index_tenant(query)
+    self.class.get(
+      "/tenant",
       query: query,
       headers: {
         "Content-Type" => "application/json",
