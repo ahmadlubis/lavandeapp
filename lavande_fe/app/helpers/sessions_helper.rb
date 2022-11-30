@@ -21,4 +21,8 @@ module SessionsHelper
       session[:role] == 'admin'
    end
 
+   def is_owner
+      # TODO: Hit List Units, return true if response is not empty
+   end
+
 end

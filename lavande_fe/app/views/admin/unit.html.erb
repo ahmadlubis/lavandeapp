@@ -1,35 +1,74 @@
-<h1>Unit</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unit List by Owner</title>
+  </head>
+  <body>
+    <h1>Unit</h1>
 
-<div class="text-right">
-  <%= button_to "Buat Unit", admin_new_unit_path, method: :get, class:"btn btn btn-primary" %>
-</div>
-<br>
+    <div class="text-right">
+      <%= button_to "Buat Unit", admin_new_unit_path, method: :get, class:"btn btn btn-primary" %>
+    </div>
+    <br>
 
-<%= form_with url: admin_unit_path, method: :get do |f| %>
-  <div class="row g-4">
-    <div class="col-auto">
-        <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, class: "form-select" %>
-    </div>
-    <div class="col-auto">
-        <%= f.select :floor, [1, 2, 3], { prompt: "Floor", selected: params[:floor] }, class: "form-select" %>
-    </div>
-    <% if !params[:tower].nil? && !params[:floor].nil? && !@units.empty? %>
-      <div class="col-auto">
-          <%= f.select :unit, @units, { prompt: "Unit", selected: params[:unit] }, class: "form-select" %>
+    <h5>Cari Unit</h5>
+    <%= form_with url: admin_unit_path, method: :get do |f| %>
+      <div class="row g-4">
+        <div class="col-auto">
+            <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, {class: "form-select", id: "towerSelect", onchange: "readParams()"} %>
+        </div>
+        <div class="col-auto">
+            <%= f.select :floor, [1, 2, 3], { prompt: "Floor", selected: params[:floor] }, class: "form-select", id: "floorSelect", onchange: "readParams()" %>
+        </div>
+        <% if !params[:tower].nil? && !params[:floor].nil? && !@units.empty? %>
+          <div class="col-auto">
+              <%= f.select :unit_no, @units, { prompt: "Unit", selected: params[:unit_no] }, class: "form-select", id: "unitSelect", onchange: "this.form.submit()" %>
+          </div>
+        <% end %>
+        <%# <div class="col-auto"> %>
+            <%# <%= f.submit "Search", :name => nil, class: "btn btn-primary" %>
+        <%# </div> %>
       </div>
     <% end %>
-    <div class="col-auto">
-        <%= f.submit "Search", :name => nil, class: "btn btn-primary" %>
-    </div>
-  </div>
-<% end %>
 
-<br>
-<% unless @cur_unit.nil? %>
-  <p>Gov ID: <%= @cur_unit['gov_id'] %></p>
-  <p>Tower <%= @cur_unit['tower'] %> / Floor <%= @cur_unit['floor'] %> / Unit No. <%= @cur_unit['unit_no'] %></p>
-<% end %>
+    <br>
+    <% unless @cur_unit.nil? %>
+      <p>Gov ID: <%= @cur_unit['gov_id'] %></p>
+      <p>Tower <%= @cur_unit['tower'] %> / Floor <%= @cur_unit['floor'] %> / Unit No. <%= @cur_unit['unit_no'] %></p>
+    <% end %>
 
-<% if (!params[:tower].nil? && !params[:floor].nil?) && @units.empty? && @cur_unit.nil? %>
-  <p>Tidak ada unit yang sesuai</p>
-<% end %>
+    <% if (!params[:tower].nil? && !params[:floor].nil?) && @units.empty? && @cur_unit.nil? %>
+      <p>Tidak ada unit yang sesuai</p>
+    <% end %>
+  </body>
+</html>
+
+<script type="text/javascript">
+  function readParams() {
+      paramsDict = {}
+      
+      var tower = document.getElementById("towerSelect");
+      var towerVal = tower.options[tower.selectedIndex].value;
+      if (towerVal) {
+        paramsDict["tower"] = towerVal;
+      };
+      var floor = document.getElementById("floorSelect");
+      var floorVal = floor.options[floor.selectedIndex].value;
+      if (floorVal) {
+        paramsDict["floor"] = floorVal;
+      };
+      oldParams = (new URL(document.location)).searchParams;
+      if (oldParams.get("tower") == towerVal && oldParams.get("floor") == floorVal) {
+        var unitVal = unit.options[unit.selectedIndex].value;
+        if (unitVal) {
+          paramsDict["unit_no"] = unitVal;
+        };
+      }
+
+      if ("tower" in paramsDict && "floor" in paramsDict) {
+        window.location.href = window.location.pathname + "?" + new URLSearchParams(paramsDict).toString();
+      }
+  };
+</script>

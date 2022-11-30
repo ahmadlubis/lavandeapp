@@ -68,11 +68,10 @@ class AdminController < ApplicationController
 
   def unit
     unit_input = params
-    if !unit_input[:tower].nil? && !unit_input[:floor].nil? && !unit_input[:unit].nil?
-      result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor, :unit), 0)
+    if !unit_input[:tower].nil? && !unit_input[:floor].nil? && !unit_input[:unit_no].nil?
+      @units ||= session[:units]
+      result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor, :unit_no), 0)
       if result.success?
-        # @units ||= session[:units]
-        @units = []
         @cur_unit = result.parsed_response['data'][0]
       else
         err_msg = result.parsed_response['error_message']
