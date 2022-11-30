@@ -64,6 +64,7 @@ func (h *userListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) erro
 	var resp response.GenericListResponse
 	for _, v := range result.Data {
 		resp.Data = append(resp.Data, map[string]string{
+			"id":    strconv.FormatUint(v.ID, 10),
 			"email": v.Email,
 			"name":  v.Name,
 		})

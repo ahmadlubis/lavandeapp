@@ -35,7 +35,7 @@ class UnitClient
     )
   end
 
-  # List tenatn by owners
+  # List tenant by owners
   # GET /v1/unit/tenant
   def index_tenant(query)
     self.class.get(
@@ -45,6 +45,19 @@ class UnitClient
         "Content-Type" => "application/json",
         "Authorization" => "Bearer %s" % @token
       }
+    )
+  end
+
+  # Add tenant by owners
+  # GET /v1/unit/tenant
+  def add_tenant(payload)
+    self.class.post(
+      "/tenant",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      },
+      body: payload.to_json
     )
   end
 end

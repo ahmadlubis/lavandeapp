@@ -62,7 +62,7 @@ class UnitController < ApplicationController
 
     result = UnitClient.new(@token).update(payload)
     if result.success?
-      redirect_back fallback_location: unit_path(params[:id]), notice: "unit updated"
+      redirect_to unit_path(params[:id]), notice: "unit updated"
     else
       err_msg = result.parsed_response['error_message']
       redirect_back fallback_location: unit_path(params[:id]), alert: "An error occurred when updating unit: %s" % err_msg
