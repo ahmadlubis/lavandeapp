@@ -1,4 +1,3 @@
-# app/models/product.rb
 class User
     include ActiveModel::Model
     include ActiveModel::Attributes

@@ -47,6 +47,7 @@ class SessionsController < ApplicationController
       redirect_to user_index_path, notice: "Logged in"
     else
       err_msg = result.parsed_response['error_message']
+      cookies.delete(:access_token)
       redirect_back fallback_location: new_session_path, alert: "Error: %s" % err_msg
     end
   end

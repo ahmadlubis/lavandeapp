@@ -1,4 +1,4 @@
-class AdminClient
+class Admin::UnitClient
   include HTTParty
   base_uri "http://localhost:10000/v1/admin"
   format :json
@@ -10,14 +10,14 @@ class AdminClient
   end
 
   # Users list
-  # GET /v1/admin/users
+  # POST /v1/admin/users
   def get_users(query) 
     self.class.get(
       "/users",
-      query: query,
       headers: {
         "Authorization" => "Bearer %s" % @token
       },
+      query: query
     )
   end
 

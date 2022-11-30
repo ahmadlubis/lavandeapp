@@ -1,6 +1,6 @@
-<h2>Buat Unit</h2>
+<h2>Edit Unit</h2>
 
-<%= form_with url: admin_unit_path do |f| %>
+<%= form_with model: @unit, url: admin_unit_path(@unit.id), method: :patch do |f| %>
   <div class="field form-group">
     <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
     <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>
@@ -26,5 +26,3 @@
     <%= f.submit "Create", class: "btn btn-secondary" %>
   </div>
 <% end %>
-
-<%# <%= render "devise/shared/links" %> %>
