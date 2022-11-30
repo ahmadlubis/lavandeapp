@@ -2,7 +2,7 @@ class Unit
     include ActiveModel::Model
     include ActiveModel::Attributes
 
-    attr_accessor :gov_id, :tower, :floor, :unit_no
+    attr_accessor :id, :gov_id, :tower, :floor, :unit_no, :ajb, :akte, :created_at, :updated_at
 
     validates :gov_id, presence: true
     validates :tower, presence: true

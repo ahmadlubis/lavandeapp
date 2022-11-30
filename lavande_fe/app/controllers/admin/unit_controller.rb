@@ -1,20 +1,24 @@
 class Admin::UnitController < ApplicationController
+  require_relative '../../clients/admin/unit_client'
+  PAGINATION_LIMIT = 10
 
-  def unit
-    unit_input = params
-    if !unit_input[:tower].nil? && !unit_input[:floor].nil? && !unit_input[:unit_no].nil?
+  def index
+    unit_input = unit_list_query
+    if unit_input[:tower].present? && unit_input[:floor].present? && unit_input[:unit_no].present?
       @units ||= session[:units]
-      result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor, :unit_no), 0)
+      result = Admin::UnitClient.new(@token).index(unit_input)
       if result.success?
-        @cur_unit = result.parsed_response['data'][0]
+        unless result.parsed_response['data'].empty?
+          @cur_unit = result.parsed_response['data'][0]
+        end
       else
         err_msg = result.parsed_response['error_message']
         redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when fetching units: %s" % err_msg
       end
-    elsif !unit_input[:tower].nil? && !unit_input[:floor].nil?
-      result = AdminClient.new.get_units(@token, unit_input.permit(:tower, :floor), 0)
+    elsif unit_input[:tower].present? && unit_input[:floor].present?
+      @units ||= []
+      result = Admin::UnitClient.new(@token).index(unit_input)
       if result.success?
-        @units ||= []
         for unit in result.parsed_response['data'] do
           @units << [unit['gov_id'], unit['unit_no'].to_i]
         end
@@ -36,9 +40,9 @@ class Admin::UnitController < ApplicationController
   end
 
   def create
-    unit_data = create_unit_params
+    unit_data = create_unit_payload
     session[:unit_data] = unit_data
-    result = AdminClient.new.create_unit(@token, unit_data)
+    result = Admin::UnitClient.new(@token).create(unit_data)
     if result.success?
       redirect_to admin_unit_index_path, notice: "Successfully created unit %s" % unit_data[:gov_id]
     else
@@ -48,29 +52,20 @@ class Admin::UnitController < ApplicationController
   end
 
   def edit
-    result = AdminClient.new.edit(@token)
-    if result.success?
-      unit_data = result.parsed_response
-      @unit = unit.new(unit_data)
+    result = Admin::UnitClient.new(@token).index(edit_unit_query)
+    if result.success? && !result.parsed_response['data'].empty?
+      unit_data = result.parsed_response['data'][0]
+      @unit = Unit.new(unit_data)
     else
       redirect_to admin_unit_index_path, alert: "An error occurred when retrieving unit data"
     end
   end
 
   def update
-    unit_data = unit_edit_params
-    if !unit_data[:password].blank?
-      # Check password
-      if unit_data[:password] != unit_data[:password_confirmation]
-        redirect_back fallback_location: unit_index_path, alert: "Passwords are not equal"
-        return
-      end
-    else
-      unit_data.delete(:password)
-    end
-    result = AdminClient.new.update(unit_data.except(:password_confirmation), @token)
+    unit_data = update_unit_payload
+    result = Admin::UnitClient.new(@token).update(unit_data)
     if result.success?
-      redirect_to unit_index_path, notice: "Successfully updated unit data"
+      redirect_to admin_unit_index_path, notice: "Successfully updated unit %s data" % unit_data['gov_id']
     else
       err_msg = result.parsed_response['error_message']
       redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when updating unit data: %s" % err_msg
@@ -79,13 +74,43 @@ class Admin::UnitController < ApplicationController
 
   private
 
-  # def unit_params
-  #   params.require([:tower, :floor])
-  #   params.permit(:tower, :floor)
-  # end
+  def unit_list_query
+    query = {}
+    if params[:tower].present?
+      query[:tower] = params[:tower]
+    end
+    if params[:floor].present?
+      query[:floor] = params[:floor]
+    end
+    if params[:unit_no].present?
+      query[:unit_no] = params[:unit_no]
+    end
+    query[:page] = 1
+    query[:limit] = PAGINATION_LIMIT
+    query[:offset] = 0
+    query
+  end
 
-  def create_unit_params
+  def create_unit_payload
     params.require([:gov_id, :tower, :floor, :unit_no])
-    params.permit(:gov_id, :tower, :floor, :unit_no)
+    payload = params.permit(:gov_id, :tower, :floor, :unit_no)
+    payload
+  end
+
+  def edit_unit_query
+    params.require(:id)
+    query = params.permit(:id)
+    query[:gov_id] = query[:id]
+    query.delete(:id)
+    query[:page] = 1
+    query[:limit] = PAGINATION_LIMIT
+    query[:offset] = 0
+    query
+  end
+
+  def update_unit_payload
+    payload = params.require(:unit).permit(:id, :gov_id, :tower, :floor, :unit_no)
+    payload[:id] = payload[:id].to_i
+    payload
   end
 end

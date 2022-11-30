@@ -38,7 +38,6 @@ class Admin::UserController < ApplicationController
   def user_list_query
     params[:page] ||= 1
     params[:page] = params[:page].to_i
-    params.require(:page)
     query = params.permit(:page)
     if params[:search].present?
       query[:name] = params[:search]

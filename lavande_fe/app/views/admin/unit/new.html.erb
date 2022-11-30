@@ -1,6 +1,6 @@
 <h2>Buat Unit</h2>
 
-<%= form_with url: new_admin_unit_path do |f| %>
+<%= form_with url: new_admin_unit_path, class: "w-50" do |f| %>
   <div class="field form-group">
     <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
     <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>

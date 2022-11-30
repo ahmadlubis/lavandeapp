@@ -9,23 +9,24 @@ class Admin::UnitClient
     @token = token
   end
 
-  # Users list
-  # POST /v1/admin/users
-  def get_users(query) 
+  # Units list
+  # POST /v1/admin/units
+  def index(query)
+    p query
     self.class.get(
-      "/users",
+      "/units",
+      query: query,
       headers: {
         "Authorization" => "Bearer %s" % @token
-      },
-      query: query
+      }
     )
   end
 
-  # Change user status
-  # PATCH /v1/admin/users
-  def change_status(payload) 
-    self.class.patch(
-      "/users",
+  # Create unit
+  # POST /v1/admin/units
+  def create(payload)
+    self.class.post(
+      "/units",
       headers: {
         "Content-Type" => "application/json",
         "Authorization" => "Bearer %s" % @token
@@ -34,45 +35,17 @@ class Admin::UnitClient
     )
   end
 
-  # Units list
+  # Update unit
   # POST /v1/admin/units
-  def get_units(token, unit_data, page) 
-    query = {
-      "limit" => 5,
-      "offset" => 5 * page
-    }.merge(unit_data)
-    self.class.get(
-      "/units",
-      headers: {
-        "Authorization" => "Bearer %s" % token
-      },
-      query: query
-    )
-  end
-
-  # Create unit
-  # POST /v1/admin/units
-  def create_unit(token, unit_data)
-    self.class.post(
+  def update(payload)
+    p payload
+    self.class.patch(
       "/units",
       headers: {
         "Content-Type" => "application/json",
-        "Authorization" => "Bearer %s" % token
+        "Authorization" => "Bearer %s" % @token
       },
-      body: unit_data.to_json
-    )
-  end
-
-  # Create unit
-  # POST /v1/admin/units
-  def create_unit(token, unit_data)
-    self.class.post(
-      "/units",
-      headers: {
-        "Content-Type" => "application/json",
-        "Authorization" => "Bearer %s" % token
-      },
-      body: unit_data.to_json
+      body: payload.to_json
     )
   end
 end

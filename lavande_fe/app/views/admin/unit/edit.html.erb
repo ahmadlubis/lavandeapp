@@ -1,28 +1,29 @@
 <h2>Edit Unit</h2>
 
-<%= form_with model: @unit, url: admin_unit_path(@unit.id), method: :patch do |f| %>
+<%= form_with model: @unit, url: admin_unit_path(@unit.id), method: :patch, class: "w-50" do |f| %>
+  <%= f.hidden_field( :id) %>
   <div class="field form-group">
     <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
-    <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>
+    <%= f.text_field :gov_id, autofocus: true, class: "form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :tower, class: "form-label" %><br />
-    <%= f.text_field :tower, autofocus: true, class: "form-control", autocomplete: "name", value: params[:tower] %>
+    <%= f.text_field :tower, autofocus: true, class: "form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :floor, class: "form-label" %><br />
-    <%= f.text_field :floor, autofocus: true, class: "form-control", autocomplete: "NIK", value: params[:floor] %>
+    <%= f.text_field :floor, autofocus: true, class: "form-control" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :unit_no, "Unit Number", class: "form-label" %><br />
-    <%= f.text_field :unit_no, autofocus: true, class: "form-control", autocomplete: "unit_no", value: params[:unit_no] %>
+    <%= f.text_field :unit_no, autofocus: true, class: "form-control" %>
   </div>
 
   <br>
   <div class="actions">
-    <%= f.submit "Create", class: "btn btn-secondary" %>
+    <%= f.submit "Edit", class: "btn btn-secondary" %>
   </div>
 <% end %>
