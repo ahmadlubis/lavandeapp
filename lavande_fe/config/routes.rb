@@ -21,7 +21,9 @@ Rails.application.routes.draw do
   resources :sessions
   resources :user
   resources :unit, only: [:index, :show, :update] do
-    resources :tenant, only: [:index, :create]
+    resources :tenant, only: [:index, :create] do
+      post 'delete', on: :collection
+    end
   end
 
   # patch '/admin/:target_id/status', to: 'admin#status', as: 'admin_status'

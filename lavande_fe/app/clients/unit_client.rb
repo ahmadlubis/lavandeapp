@@ -60,4 +60,17 @@ class UnitClient
       body: payload.to_json
     )
   end
+
+  # Delete tenant by owners
+  # DELETE /v1/unit/tenant
+  def delete_tenant(payload)
+    self.class.delete(
+      "/tenant",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      },
+      body: payload.to_json
+    )
+  end
 end

@@ -51,6 +51,10 @@ type TenantCreationUsecase interface {
 	Create(ctx context.Context, req request.CreateTenantRequest) (entity.Tenant, error)
 }
 
+type TenantDeletionUsecase interface {
+	Delete(ctx context.Context, req request.DeleteTenantRequest) error
+}
+
 type TenantListUsecase interface {
 	List(ctx context.Context, request request.ListTenantRequest) (response.ListTenantResponse, error)
 }

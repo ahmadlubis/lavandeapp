@@ -36,6 +36,7 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	listUnitUsecase := unit.NewUnitListUsecase(db)
 
 	createTenantUsecase := tenant.NewTenantCreationUsecase(db)
+	deleteTenantUsecase := tenant.NewTenantDeletionUsecase(db)
 	listTenantUsecase := tenant.NewTenantListUsecase(db)
 
 	router := mux.NewRouter().StrictSlash(true)
@@ -49,6 +50,7 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	router.HandleFunc("/v1/unit/", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitUpdateHandler(verifyOwnerUsecase, updateUnitUsecase)).ServeHTTP).Methods(http.MethodPatch)
 	router.HandleFunc("/v1/unit", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, unitHandler.NewUnitListHandler(listUnitUsecase)).ServeHTTP).Methods(http.MethodGet)
 	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantCreationHandler(verifyOwnerUsecase, createTenantUsecase)).ServeHTTP).Methods(http.MethodPost)
+	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantDeletionHandler(verifyOwnerUsecase, deleteTenantUsecase)).ServeHTTP).Methods(http.MethodDelete)
 	router.HandleFunc("/v1/unit/tenant", middleware.WithDefaultMiddlewares(verifyUserTokenUsecase, tenantHandler.NewTenantListHandler(verifyOwnerUsecase, listTenantUsecase)).ServeHTTP).Methods(http.MethodGet)
 
 	router.HandleFunc("/v1/admin/users", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUserListHandler(listUserUsecase)).ServeHTTP).Methods(http.MethodGet)

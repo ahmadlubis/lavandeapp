@@ -78,7 +78,11 @@
         <td><%= val["user"]["email"] %></td>
         <td><%= val["user"]["name"] %></td>
         <td>
-          <%= button_to "Delete", unit_path(val["id"]), method: :get, class:"btn btn-danger" %>
+          <%= form_with url: delete_unit_tenant_index_path(@result["unit"]["id"]), method: "post", :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
+            <%= f.hidden_field :unit_id, value: @result["unit"]["id"] %>
+            <%= f.hidden_field :user_id, value: val["user"]["id"] %>
+            <%= f.submit "Delete", class: "btn btn-danger" %>
+          <% end %>
         </td>
       </tr>
     <% end %>

@@ -10,6 +10,11 @@ type CreateTenantRequest struct {
 	EndAt   *time.Time `json:"end_at"`
 }
 
+type DeleteTenantRequest struct {
+	UnitID uint64 `json:"unit_id"`
+	UserID uint64 `json:"user_id"`
+}
+
 type ListTenantRequest struct {
 	UnitID     uint64 `json:"unit_id"`
 	UserID     uint64 `json:"user_id"`

@@ -36,6 +36,20 @@ class TenantController < ApplicationController
     end
   end
 
+  def delete
+    payload = params.permit(:unit_id, :user_id)
+    payload[:unit_id] = payload[:unit_id].to_i
+    payload[:user_id] = payload[:user_id].to_i
+
+    result = UnitClient.new(@token).delete_tenant(payload)
+    if result.success?
+      redirect_to unit_path(payload[:unit_id]), notice: "tenant deleted"
+    else
+      err_msg = result.parsed_response['error_message']
+      redirect_back fallback_location: unit_path(payload[:unit_id]), alert: "An error occurred when deleting tenant: %s" % err_msg
+    end
+  end
+
   private
 
   def unit_show_query
