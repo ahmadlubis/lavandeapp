@@ -21,8 +21,13 @@ func NewUnitListHandler(usecase usecase.UnitListUsecase) handler.Handler {
 func (h *unitListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 
-	var ownerID, limit, offset uint64
+	var ID, ownerID, limit, offset uint64
 	var err error
+	if query.Get("id") != "" {
+		if ID, err = strconv.ParseUint(query.Get("id"), 10, 64); err != nil {
+			return model.NewExpectedError("id must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
+		}
+	}
 	if query.Get("owner_id") != "" {
 		if ownerID, err = strconv.ParseUint(query.Get("owner_id"), 10, 64); err != nil {
 			return model.NewExpectedError("owner_id must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
@@ -36,6 +41,7 @@ func (h *unitListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) erro
 	}
 
 	req := request.ListUnitRequest{
+		ID:		 ID,
 		OwnerID: ownerID,
 		GovID:   query.Get("gov_id"),
 		Tower:   query.Get("tower"),
