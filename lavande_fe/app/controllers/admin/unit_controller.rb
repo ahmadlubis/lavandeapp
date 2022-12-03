@@ -45,6 +45,7 @@ class Admin::UnitController < ApplicationController
     result = Admin::UnitClient.new(@token).create(unit_data)
     if result.success?
       redirect_to admin_unit_index_path, notice: "Successfully created unit %s" % unit_data[:gov_id]
+      session.delete(:unit_data)
     else
       err_msg = result.parsed_response['error_message']
       redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when creating unit: %s" % err_msg
