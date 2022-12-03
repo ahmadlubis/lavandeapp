@@ -1,45 +1,78 @@
-<h2>Edit</h2>
+<div class="jumbotron">
+  <h2>Edit</h2>
+  <%= form_with model: @user, url: user_path(@user.id), method: :patch do |f| %>
+    <div class="card mb-4 w-100" style="max-width: 700px">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :email, class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email" %>
+          </div>
+        </div>
+        <hr style="height:2px">
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :name, class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :name, autofocus: true, class: "form-control", autocomplete: "name" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :nik, "NIK", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :nik, autofocus: true, class: "form-control", autocomplete: "NIK" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :phone_no, class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :religion, "Agama", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.select :religion, [["Islam", "islam"], ["Protestan", "protestant"], ["Katolik", "catholic"], ["Hindu", "hindu"], ["Buddha", "buddha"], ["Confucius", "confucius"], ["Lainnya", "others"]], {}, class: "form-select" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :password, "New password", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.password_field :password, class: "form-control", autocomplete: "password" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :password_confirmation, "Confirm password", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="ml-5">
+            <%= f.submit "Save", class: "btn btn-secondary w-25", style: "min-width: 50px" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
 
-<%= form_with model: @user, url: user_path(@user.id), method: :patch do |f| %>  
-  <div class="field form-group">
-    <%= f.label :email, class: "form-label" %><br />
-    <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :password, "New password", class: "form-label" %>
-    <%= f.password_field :password, class: "form-control", autocomplete: "password" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :password_confirmation, "New password confirmation", class: "form-label" %><br />
-    <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
-  </div>
-
-  <br>
-
-  <div class="field form-group">
-    <%= f.label :name, class: "form-label" %><br />
-    <%= f.text_field :name, autofocus: true, class: "form-control", autocomplete: "name" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :nik, "NIK", class: "form-label" %><br />
-    <%= f.text_field :nik, autofocus: true, class: "form-control", autocomplete: "NIK" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :phone_no, class: "form-label" %><br />
-    <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :religion, "Agama", class: "form-label" %>
-    <%= f.select :religion, [["Islam", "islam"], ["Protestan", "protestant"], ["Katolik", "catholic"], ["Hindu", "hindu"], ["Buddha", "buddha"], ["Confucius", "confucius"], ["Lainnya", "others"]], {}, class: "form-select" %>
-  </div>
-  
-  <br>
-  <div class="actions">
-    <%= f.submit "Edit", class: "btn btn-secondary" %>
-  </div>
-<% end %>

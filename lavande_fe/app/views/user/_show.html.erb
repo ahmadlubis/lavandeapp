@@ -1,15 +1,57 @@
 <div class="jumbotron">
-  <h1 class="display-4">
-    <%= @user.name %>
-    <%= @user.nik %>
-  </h1>
-  <p class="lead">
-    <%= @user.email %> | <%= @user.phone_no %> | <%= @user.religion %>
-  </p>
-  <hr class="my-4">
-  <div>
-    <%= link_to "Edit", edit_user_path(@user.id), class: "btn btn-secondary" %>
-    <%# <%= link_to "Back to rails ttrls", rails_ttrls_path, class: "btn btn-secondary" %> %>
-    <%# <%= button_to "Destroy this rails ttrl", @user, method: :delete, class: "btn btn-secondary"  %> %>
+  <h2>Profile</h2>
+  <div class="card mb-4 w-100" style="max-width: 500px">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">Full Name</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0"><%= @user.name %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">NIK</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0"><%= @user.nik %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">Email</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0"><%= @user.email %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">Phone No</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0"><%= @user.phone_no %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">Religion</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0"><%= @user.religion %></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="ml-5">
+          <%= link_to "Edit", edit_user_path(@user.id), class: "btn btn-secondary w-25", style: "min-width: 50px" %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
