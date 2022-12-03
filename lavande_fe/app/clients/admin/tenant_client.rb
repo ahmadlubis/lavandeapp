@@ -1,4 +1,4 @@
-class Admin::UnitClient
+class Admin::TenantClient
   include HTTParty
   base_uri "http://localhost:10000/v1/admin"
   format :json
@@ -9,11 +9,11 @@ class Admin::UnitClient
     @token = token
   end
 
-  # Units list
-  # POST /v1/admin/units
+  # Tenants list
+  # POST /v1/admin/tenants
   def index(query)
     self.class.get(
-      "/units",
+      "/tenants",
       query: query,
       headers: {
         "Authorization" => "Bearer %s" % @token
@@ -21,25 +21,11 @@ class Admin::UnitClient
     )
   end
 
-  # Create unit
-  # POST /v1/admin/units
+  # Create tenant
+  # POST /v1/admin/tenants
   def create(payload)
     self.class.post(
-      "/units",
-      headers: {
-        "Content-Type" => "application/json",
-        "Authorization" => "Bearer %s" % @token
-      },
-      body: payload.to_json
-    )
-  end
-
-  # Update unit
-  # POST /v1/admin/units
-  def update(payload)
-    p payload
-    self.class.patch(
-      "/units",
+      "/tenants",
       headers: {
         "Content-Type" => "application/json",
         "Authorization" => "Bearer %s" % @token

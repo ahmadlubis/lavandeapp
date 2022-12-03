@@ -1,0 +1,68 @@
+<%= form_with url: admin_tenant_index_path, method: :get do |f| %>
+  <% if params[:user_id] %>
+    <%= f.hidden_field :user_id, value: params[:user_id] %>
+  <% end %>
+
+  <div>
+    <div class="mt-2">
+      <label for="tower">Tower</label>
+      <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, class: "form-select mt-1" %>
+    </div>
+    <div class="mt-2">
+      <label for="floor">Floor</label>
+      <%= f.select :floor, ["1", "2", "3"], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
+    </div>
+  </div>
+  <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
+<% end %>
+
+<%= form_with url: admin_tenant_index_path, method: :get, class: "w-50" do |f| %>
+  <% if params[:user_id] %>
+    <%= f.hidden_field :user_id, value: params[:user_id] %>
+  <% end %>
+
+  <% if @result["units"] %>
+    <table class="table mt-2">
+      <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">#</th>
+        <th scope="col">Gov ID</th>
+        <th scope="col">Tower</th>
+        <th scope="col">Floor</th>
+        <th scope="col">Unit No</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @result["units"]["data"].each_with_index do |val, i| %>
+          <tr>
+            <th><%= f.radio_button :unit_id, val["id"], class: "form-check-input", required: true %></th>
+            <td><%= i + 1 %></td>
+            <td><%= val["gov_id"] %></td>
+            <td><%= val["tower"] %></td>
+            <td><%= val["floor"] %></td>
+            <td><%= val["unit_no"] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link <% if params[:unit_page] == 1 %>disabled<% end %>" id="unit-page-prev" page="<%= params[:unit_page] - 1 %>">Previous</a></li>
+        <% (1..(@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil).each do |v| %>
+        <li class="page-item"><a class="page-link <% if params[:unit_page] == v %>active<% end %>" id="unit-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+        <% end %>
+        <li class="page-item"><a class="page-link <% if params[:unit_page] == (@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="unit-page-next" page="<%= params[:unit_page] + 1 %>">Next</a></li>
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <%= f.submit "Select Unit", :name => nil, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @result["unit"] %>
+  <p class="mt-2">Currently selected unit: <%= @result["unit"]["gov_id"] %></p>
+<% end %>

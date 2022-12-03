@@ -100,8 +100,8 @@ class Admin::UnitController < ApplicationController
   def edit_unit_query
     params.require(:id)
     query = params.permit(:id)
-    query[:gov_id] = query[:id]
-    query.delete(:id)
+    # query[:gov_id] = query[:id]
+    # query.delete(:id)
     query[:page] = 1
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = 0

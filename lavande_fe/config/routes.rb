@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       patch 'status'
     end
     resources :unit, only: [:index, :new, :create, :edit, :update]
+    resources :tenant, only: [:index, :new, :create]
   end
 
   resources :sessions

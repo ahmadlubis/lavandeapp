@@ -1,0 +1,6 @@
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+	background-color: #F2E9F6 !important;
+	color: #985ECF !important;
+	outline: none !important;
+	box-shadow: none !important;
+}

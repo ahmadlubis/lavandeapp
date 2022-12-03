@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Tenant List</title>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col">
+        <%= render "admin/tenant/search_user" %>
+      </div>
+      <div class="col">
+        <%= render "admin/tenant/search_unit" %>
+      </div>
+    </div>
+
+    <% if @result["tenants"] %>
+    <br/>
+    <h2 class="card-title">Tenant List</h2>
+    <table class="table mt-2">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Role</th>
+        <th scope="col">Email</th>
+        <th scope="col">Name</th>
+        <th scope="col">Tower</th>
+        <th scope="col">Floor</th>
+        <th scope="col">Unit No</th>
+        <th scope="col">Gov ID</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @result["tenants"]["data"].each_with_index do |val, i| %>
+          <tr>
+            <th scope="row"><%= i + 1 %></th>
+            <td><%= val["role"] %></td>
+            <td><%= val["user"]["email"] %></td>
+            <td><%= val["user"]["name"] %></td>
+            <td><%= val["unit"]["tower"] %></td>
+            <td><%= val["unit"]["floor"] %></td>
+            <td><%= val["unit"]["unit_no"] %></td>
+            <td><%= val["unit"]["gov_id"] %></td>
+            <td>
+              <%= form_with url: admin_tenant_index_path do |f| %>
+                <%= f.hidden_field :unit_id, value: val["unit"]["id"] %>
+                <%= f.hidden_field :user_id, value: val["user"]["id"] %>
+                <%= f.submit "Delete", class: "btn btn-danger" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link <% if params[:tenant_page] == 1 %>disabled<% end %>" id="tenant-page-prev" page="<%= params[:tenant_page] - 1 %>">Previous</a></li>
+        <% (1..(@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil).each do |v| %>
+        <li class="page-item"><a class="page-link <% if params[:tenant_page] == v %>active<% end %>" id="tenant-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+        <% end %>
+        <li class="page-item"><a class="page-link <% if params[:tenant_page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="tenant-page-next" page="<%= params[:tenant_page] + 1 %>">Next</a></li>
+      </ul>
+    </nav>
+    <% end %>
+  </body>
+</html>
+
+<script>
+  var unitElements = document.querySelectorAll('[id^="unit-page-"]')
+  var userElements = document.querySelectorAll('[id^="user-page-"]')
+  var tenantElements = document.querySelectorAll('[id^="tenant-page-"]')
+
+  var myFunction = function(type) {
+      var attribute = this.getAttribute("page");
+      var params = (new URL(document.location)).searchParams;
+      params.set(type + "_page", attribute)
+      window.location.href = window.location.pathname + "?" + params.toString()
+  };
+
+  for (var i = 0; i < unitElements.length; i++) {
+      unitElements[i].addEventListener('click', myFunction("unit"), false);
+  }
+  for (var i = 0; i < userElements.length; i++) {
+      userElements[i].addEventListener('click', myFunction("user"), false);
+  }
+  for (var i = 0; i < tenantElements.length; i++) {
+      tenantElements[i].addEventListener('click', myFunction("tenant"), false);
+  }
+</script>
