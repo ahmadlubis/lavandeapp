@@ -4,8 +4,8 @@
     <div class="card mb-4 w-100" style="max-width: 700px">
       <div class="card-body">
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :email, class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :email, class: "form-label mb-0 mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.email_field :email, autofocus: true, class: "form-control", autocomplete: "email" %>
@@ -13,8 +13,8 @@
         </div>
         <hr style="height:2px">
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :name, class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :name, class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.text_field :name, autofocus: true, class: "form-control", autocomplete: "name" %>
@@ -22,8 +22,8 @@
         </div>
         <hr>
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :nik, "NIK", class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :nik, "NIK", class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.text_field :nik, autofocus: true, class: "form-control", autocomplete: "NIK" %>
@@ -31,8 +31,8 @@
         </div>
         <hr>
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :phone_no, class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :phone_no, class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.text_field :phone_no, autofocus: true, class: "form-control", autocomplete: "phone_no" %>
@@ -40,8 +40,8 @@
         </div>
         <hr>
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :religion, "Agama", class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :religion, "Agama", class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.select :religion, [["Islam", "islam"], ["Protestan", "protestant"], ["Katolik", "catholic"], ["Hindu", "hindu"], ["Buddha", "buddha"], ["Confucius", "confucius"], ["Lainnya", "others"]], {}, class: "form-select" %>
@@ -49,8 +49,8 @@
         </div>
         <hr>
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :password, "New password", class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :password, "New password", class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.password_field :password, class: "form-control", autocomplete: "password" %>
@@ -58,8 +58,8 @@
         </div>
         <hr>
         <div class="row">
-          <div class="col-sm-3">
-            <%= f.label :password_confirmation, "Confirm password", class: "form-label" %>
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :password_confirmation, "Confirm password", class: "form-label mb-0" %>
           </div>
           <div class="col-sm-9">
             <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>

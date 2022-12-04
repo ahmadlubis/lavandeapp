@@ -33,4 +33,17 @@ class Admin::UserClient
       body: payload.to_json
     )
   end
+
+  # Set user as superadmin
+  # PUT  /v1/admin/users
+  def set_admin(payload)
+    self.class.put(
+      "/set",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      },
+      body: payload.to_json
+    )
+  end
 end

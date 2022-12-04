@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :user, only: :index do
       patch 'status'
+      put 'set_admin', as: 'elevate'
     end
     resources :unit, only: [:index, :new, :create, :edit, :update]
     resources :tenant, only: [:index, :new, :create] do

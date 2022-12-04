@@ -42,8 +42,10 @@ class Admin::TenantController < ApplicationController
       end
     end
     
-    if params[:tower].present? || params[:floor].present?
+    if params[:tower].present? || params[:floor].present? || params[:gov_id].present?
+      p unit_list_query
       units = unit_client.index(unit_list_query)
+      p units
       if units.success?
         @result["units"] = units.parsed_response
       else
@@ -127,7 +129,7 @@ class Admin::TenantController < ApplicationController
       end
     end
     
-    if params[:tower].present? || params[:floor].present?
+    if params[:tower].present? || params[:floor].present? || params[:gov_id].present?
       units = unit_client.index(unit_list_query)
       if units.success?
         @result["units"] = units.parsed_response
@@ -205,8 +207,14 @@ class Admin::TenantController < ApplicationController
   def unit_list_query
     params[:unit_page] ||= 1
     params[:unit_page] = params[:unit_page].to_i
-    query = params.permit(:unit_page, :tower, :floor)
-    query[:floor] = query[:floor].to_i
+    query = {}
+    # Override tower & floor if gov_id exists
+    if params[:gov_id]
+      query = params.permit(:unit_page, :gov_id)
+    else
+      query = params.permit(:unit_page, :tower, :floor)
+      query[:floor] = query[:floor].to_i
+    end
     query[:page] = query.delete :unit_page
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = (query[:page] - 1) * PAGINATION_LIMIT

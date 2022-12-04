@@ -22,7 +22,7 @@ class Admin::UserController < ApplicationController
     payload = params.permit(:user_id, :status)
     payload[:target_id] = payload[:user_id].to_i
     payload.delete(:user_id)
-    
+
     result = Admin::UserClient.new(@token).status(payload)
     if result.success?
       status_action = "activated"
@@ -33,6 +33,19 @@ class Admin::UserController < ApplicationController
     else
       err_msg = result.parsed_response['error_message']
       redirect_back fallback_location: admin_user_index_path, alert: "An error occurred when updating user status: %s" % err_msg
+    end
+  end
+
+  def set_admin
+    payload = params.permit(:user_id)
+    payload[:user_id] = payload[:user_id].to_i
+    
+    result = Admin::UserClient.new(@token).set_admin(payload)
+    if result.success?
+      redirect_back fallback_location: admin_user_index_path, notice: "Successfully set user %s as superadmin" % params[:name]
+    else
+      err_msg = result.parsed_response['error_message']
+      redirect_back fallback_location: admin_user_index_path, alert: "An error occurred when elevating user: %s" % err_msg
     end
   end
 

@@ -35,7 +35,7 @@
       <tbody>
         <% @result["users"]["data"].each_with_index do |val, i| %>
           <tr>
-            <th><%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true %></th>
+            <th><%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
             <td><%= i + 1 %></td>
             <td><%= val["role"] %></td>
             <td><%= val["email"] %></td>

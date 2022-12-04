@@ -12,6 +12,10 @@
       <label for="floor">Floor</label>
       <%= f.select :floor, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
     </div>
+    <div class="mt-2">
+      <label for="gov_id">Gov ID</label>
+      <%= f.text_field :gov_id, class: "form-control mt-1", value: params[:gov_id] %>
+    </div>
   </div>
   <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
@@ -36,7 +40,7 @@
       <tbody>
         <% @result["units"]["data"].each_with_index do |val, i| %>
           <tr>
-            <th><%= f.radio_button :unit_id, val["id"], class: "form-check-input", required: true %></th>
+            <th><%= f.radio_button :unit_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
             <td><%= i + 1 %></td>
             <td><%= val["gov_id"] %></td>
             <td><%= val["tower"] %></td>

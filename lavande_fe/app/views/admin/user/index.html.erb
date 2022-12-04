@@ -18,26 +18,32 @@
 <% if @result && !@result["data"].empty? %>
   <table class="table">
     <tr>
-      <th>Name </th>
-      <th>Email </th>
-      <th>Phone No. </th>
-      <th>Role </th>
-      <th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone No.</th>
+      <th>Role</th>
+      <th>Actions</th>
     </tr>
     <% @result["data"].each do |user| %>
       <tr>
-        <td><%= user.name %></td>
-        <td><%= user.email %></td>
-        <td><%= user.phone_no %></td>
-        <td><%= user.role %></td>
+        <td class="align-middle"><%= user.name %></td>
+        <td class="align-middle"><%= user.email %></td>
+        <td class="align-middle"><%= user.phone_no %></td>
+        <td class="align-middle"><%= user.role %></td>
         <td>
-          <% if user.status == 'active' %>
-            <%= button_to "Nonaktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'nonactive', name: user.name }, class:"btn btn-outline-danger" %>
-          <% else %>
-            <%= button_to "Aktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'active', name: user.name }, class:"btn btn-outline-success" %>
-          <% end %>
+          <div class="row">
+            <div class="col-md-auto">
+              <% if user.status == 'active' %>
+                <%= button_to "Nonaktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'nonactive', name: user.name }, class: "btn btn-outline-danger", disabled: user.id == get_user_id %>
+              <% else %>
+                <%= button_to "Aktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'active', name: user.name }, class: "btn btn-outline-success" %>
+              <% end %>
+            </div>
+            <div class="col-md-auto">
+              <%= button_to "Set as SuperAdmin", admin_user_elevate_path(user.id), method: :put, params: { name: user.name }, class: "btn btn-info", disabled: user.role == "admin" %>
+            </div>
+          </div>
         </td>
-        <!--TODO: Add set user as superadmin -->
       </tr>
     <% end %>
   </table>
