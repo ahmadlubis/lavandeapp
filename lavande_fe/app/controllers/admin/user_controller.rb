@@ -19,7 +19,10 @@ class Admin::UserController < ApplicationController
   end
 
   def status
-    payload = status_payload
+    payload = params.permit(:user_id, :status)
+    payload[:target_id] = payload[:user_id].to_i
+    payload.delete(:user_id)
+    
     result = Admin::UserClient.new(@token).status(payload)
     if result.success?
       status_action = "activated"
@@ -45,13 +48,5 @@ class Admin::UserController < ApplicationController
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = (query[:page] - 1) * PAGINATION_LIMIT
     query
-  end
-
-  def status_payload
-    params.require([:user_id, :status])
-    payload = params.permit(:user_id, :status)
-    payload[:target_id] = payload[:user_id].to_i
-    payload.delete(:user_id)
-    payload
   end
 end

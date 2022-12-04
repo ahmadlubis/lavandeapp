@@ -33,4 +33,17 @@ class Admin::TenantClient
       body: payload.to_json
     )
   end
+
+  # Delete tenant
+  # POST /v1/admin/tenants
+  def delete(payload)
+    self.class.delete(
+      "/tenants",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer %s" % @token
+      },
+      body: payload.to_json
+    )
+  end
 end

@@ -1,4 +1,4 @@
-<%= form_with url: admin_tenant_index_path, method: :get do |f| %>
+<%= form_with url: url_path, method: :get do |f| %>
   <% if params[:user_id] %>
     <%= f.hidden_field :user_id, value: params[:user_id] %>
   <% end %>
@@ -16,7 +16,7 @@
   <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
 
-<%= form_with url: admin_tenant_index_path, method: :get, class: "w-50" do |f| %>
+<%= form_with url: url_path, method: :get, class: "w-50" do |f| %>
   <% if params[:user_id] %>
     <%= f.hidden_field :user_id, value: params[:user_id] %>
   <% end %>
@@ -64,5 +64,17 @@
 <% end %>
 
 <% if @result["unit"] %>
-  <p class="mt-2">Currently selected unit: <%= @result["unit"]["gov_id"] %></p>
+  <div class="row mt-3">
+    <div class="col-md-auto d-flex align-items-center">
+      <p class="mb-0">Currently selected unit: <%= @result["unit"]["gov_id"] %></p>
+    </div>
+    <div class="col-md-auto">
+      <%= form_with url: url_path, method: :get do |f| %>
+        <% if params[:user_id] %>
+          <%= f.hidden_field :user_id, value: params[:user_id] %>
+        <% end %>
+        <%= f.submit "Reset Unit", :name => nil, class: "btn btn-danger" %>
+      <% end %>
+    </div>
+  </div>
 <% end %>

@@ -40,11 +40,12 @@ class Admin::UnitController < ApplicationController
   end
 
   def create
-    unit_data = create_unit_payload
-    session[:unit_data] = unit_data
+    payload = params.permit(:gov_id, :tower, :floor, :unit_no)
+
+    session[:unit_data] = payload
     result = Admin::UnitClient.new(@token).create(unit_data)
     if result.success?
-      redirect_to admin_unit_index_path, notice: "Successfully created unit %s" % unit_data[:gov_id]
+      redirect_to admin_unit_index_path, notice: "Successfully created unit %s" % payload[:gov_id]
       session.delete(:unit_data)
     else
       err_msg = result.parsed_response['error_message']
@@ -63,10 +64,12 @@ class Admin::UnitController < ApplicationController
   end
 
   def update
-    unit_data = update_unit_payload
-    result = Admin::UnitClient.new(@token).update(unit_data)
+    payload = params.require(:unit).permit(:id, :gov_id, :tower, :floor, :unit_no)
+    payload[:id] = payload[:id].to_i
+
+    result = Admin::UnitClient.new(@token).update(payload)
     if result.success?
-      redirect_to admin_unit_index_path, notice: "Successfully updated unit %s data" % unit_data['gov_id']
+      redirect_to admin_unit_index_path, notice: "Successfully updated unit %s data" % payload['gov_id']
     else
       err_msg = result.parsed_response['error_message']
       redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when updating unit data: %s" % err_msg
@@ -92,12 +95,6 @@ class Admin::UnitController < ApplicationController
     query
   end
 
-  def create_unit_payload
-    params.require([:gov_id, :tower, :floor, :unit_no])
-    payload = params.permit(:gov_id, :tower, :floor, :unit_no)
-    payload
-  end
-
   def edit_unit_query
     params.require(:id)
     query = params.permit(:id)
@@ -107,11 +104,5 @@ class Admin::UnitController < ApplicationController
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = 0
     query
-  end
-
-  def update_unit_payload
-    payload = params.require(:unit).permit(:id, :gov_id, :tower, :floor, :unit_no)
-    payload[:id] = payload[:id].to_i
-    payload
   end
 end

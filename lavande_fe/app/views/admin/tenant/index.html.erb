@@ -6,64 +6,82 @@
     <title>Admin Tenant List</title>
   </head>
   <body>
+    <h2 class="card-title">Tenant List</h2>
+
     <div class="row">
       <div class="col">
-        <%= render "admin/tenant/search_user" %>
+        <%= render partial: "admin/tenant/search_user", locals: {url_path: admin_tenant_index_path} %>
       </div>
       <div class="col">
-        <%= render "admin/tenant/search_unit" %>
+        <%= render partial: "admin/tenant/search_unit", locals: {url_path: admin_tenant_index_path} %>
       </div>
     </div>
 
-    <% if @result["tenants"] %>
-    <br/>
-    <h2 class="card-title">Tenant List</h2>
-    <table class="table mt-2">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Role</th>
-        <th scope="col">Email</th>
-        <th scope="col">Name</th>
-        <th scope="col">Tower</th>
-        <th scope="col">Floor</th>
-        <th scope="col">Unit No</th>
-        <th scope="col">Gov ID</th>
-        <th scope="col">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-        <% @result["tenants"]["data"].each_with_index do |val, i| %>
-          <tr>
-            <th scope="row"><%= i + 1 %></th>
-            <td><%= val["role"] %></td>
-            <td><%= val["user"]["email"] %></td>
-            <td><%= val["user"]["name"] %></td>
-            <td><%= val["unit"]["tower"] %></td>
-            <td><%= val["unit"]["floor"] %></td>
-            <td><%= val["unit"]["unit_no"] %></td>
-            <td><%= val["unit"]["gov_id"] %></td>
-            <td>
-              <%= form_with url: admin_tenant_index_path do |f| %>
-                <%= f.hidden_field :unit_id, value: val["unit"]["id"] %>
-                <%= f.hidden_field :user_id, value: val["user"]["id"] %>
-                <%= f.submit "Delete", class: "btn btn-danger" %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <% if params[:user_id].present? || params[:unit_id].present? %>
+      <br/>
+      <h2 class="card-title">Tenant List</h2>
+      <table class="table mt-2">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Role</th>
+          <th scope="col">Email</th>
+          <th scope="col">Name</th>
+          <th scope="col">Tower</th>
+          <th scope="col">Floor</th>
+          <th scope="col">Unit No</th>
+          <th scope="col">Gov ID</th>
+          <%# <th scope="col">Action</th> %>
+        </tr>
+        </thead>
+        <tbody>
+          <% if @result["tenants"] %>
+            <% @result["tenants"]["data"].each_with_index do |val, i| %>
+              <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= val["role"] %></td>
+                <td><%= val["user"]["email"] %></td>
+                <td><%= val["user"]["name"] %></td>
+                <td><%= val["unit"]["tower"] %></td>
+                <td><%= val["unit"]["floor"] %></td>
+                <td><%= val["unit"]["unit_no"] %></td>
+                <td><%= val["unit"]["gov_id"] %></td>
+                <%# <td> %>
+                  <%#= form_with url: delete_admin_tenant_index_path, :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
+                    <%#= f.hidden_field :unit_id, value: val["unit"]["id"] %>
+                    <%#= f.hidden_field :user_id, value: val["user"]["id"] %>
+                    <%#= f.submit "Delete", :name => nil, class: "btn btn-danger" %>
+                  <%# <% end %>
+                <%# </td> %>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
 
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link <% if params[:tenant_page] == 1 %>disabled<% end %>" id="tenant-page-prev" page="<%= params[:tenant_page] - 1 %>">Previous</a></li>
-        <% (1..(@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil).each do |v| %>
-        <li class="page-item"><a class="page-link <% if params[:tenant_page] == v %>active<% end %>" id="tenant-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+      <% if @result["tenants"] %>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link <% if params[:tenant_page] == 1 %>disabled<% end %>" id="tenant-page-prev" page="<%= params[:tenant_page] - 1 %>">Previous</a></li>
+            <% (1..(@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil).each do |v| %>
+            <li class="page-item"><a class="page-link <% if params[:tenant_page] == v %>active<% end %>" id="tenant-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+            <% end %>
+            <li class="page-item"><a class="page-link <% if params[:tenant_page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="tenant-page-next" page="<%= params[:tenant_page] + 1 %>">Next</a></li>
+          </ul>
+        </nav>
+      <% end %>
+
+      <% unless params[:user_id].present? && params[:unit_id].present? && @result["tenants"].present? %>
+        <%= form_with url: new_admin_tenant_path, method: :get do |f| %>
+          <% if params[:user_id] %>
+            <%= f.hidden_field :user_id, value: params[:user_id] %>
+          <% end %>
+          <% if params[:unit_id] %>
+            <%= f.hidden_field :unit_id, value: params[:unit_id] %>
+          <% end %>
+          <%= f.submit "Add Tenant", :name => nil, class: "btn btn-primary" %>
         <% end %>
-        <li class="page-item"><a class="page-link <% if params[:tenant_page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="tenant-page-next" page="<%= params[:tenant_page] + 1 %>">Next</a></li>
-      </ul>
-    </nav>
+      <% end %>
     <% end %>
   </body>
 </html>

@@ -1,26 +1,16 @@
 Rails.application.routes.draw do
-  # resources :admin, only: :index do
-  #   collection do
-  #     resources :unit, controller: 'admin', only: [:index, :new, :create]
-  #     patch '/:target_id/status', to: 'admin#status', as: 'admin_status'
-  #   end
-  # end
-  # resources :admin, only: :index
-  # scope :admin do
-  #   collection do
-  #     patch '/:target_id/status', to: 'admin#status', as: 'admin_status'
-  #   end
-  # end
   namespace :admin do
     resources :user, only: :index do
       patch 'status'
     end
     resources :unit, only: [:index, :new, :create, :edit, :update]
-    resources :tenant, only: [:index, :new, :create]
+    resources :tenant, only: [:index, :new, :create] do
+      post 'delete', on: :collection
+    end
   end
 
-  resources :sessions
-  resources :user
+  resources :sessions, only: [:new, :create, :destroy]
+  resources :user, only: [:index, :new, :create, :edit, :update]
   resources :unit, only: [:index, :show, :update] do
     resources :tenant, only: [:index, :create] do
       post 'delete', on: :collection

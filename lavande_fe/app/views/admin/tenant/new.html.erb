@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Tenant</title>
+  </head>
+  <body>
+    <h2 class="card-title">Add Tenant</h2>
+
+    <div class="row">
+      <div class="col">
+        <%= render partial: "admin/tenant/search_user", locals: {url_path: new_admin_tenant_path} %>
+      </div>
+      <div class="col">
+        <%= render partial: "admin/tenant/search_unit", locals: {url_path: new_admin_tenant_path} %>
+      </div>
+    </div>
+
+    <% if params[:user_id].present? && params[:unit_id].present? %>
+      <%= form_with url: admin_tenant_index_path, class: "w-50 mt-2" do |f| %>
+        <%= f.hidden_field :unit_id, value: params[:unit_id] %>
+        <%= f.hidden_field :user_id, value: params[:user_id] %>
+
+        <div class="field form-group mb-3">
+          <%= f.label :role, "Role", class: "form-label" %>
+          <%= f.select :role, [%w[Owner owner], %w[Renter renter], %w[Resident resident], %w[Staff staff]], {}, class: "form-select" %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Create", :name => nil, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    <% end %>
+  </body>
+
+<script>
+  var unitElements = document.querySelectorAll('[id^="unit-page-"]')
+  var userElements = document.querySelectorAll('[id^="user-page-"]')
+
+  var myFunction = function(type) {
+      var attribute = this.getAttribute("page");
+      var params = (new URL(document.location)).searchParams;
+      params.set(type + "_page", attribute)
+      window.location.href = window.location.pathname + "?" + params.toString()
+  };
+
+  for (var i = 0; i < unitElements.length; i++) {
+      unitElements[i].addEventListener('click', myFunction("unit"), false);
+  }
+  for (var i = 0; i < userElements.length; i++) {
+      userElements[i].addEventListener('click', myFunction("user"), false);
+  }
+</script>
