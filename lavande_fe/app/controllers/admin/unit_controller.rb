@@ -43,7 +43,7 @@ class Admin::UnitController < ApplicationController
     payload = params.permit(:gov_id, :tower, :floor, :unit_no)
 
     session[:unit_data] = payload
-    result = Admin::UnitClient.new(@token).create(unit_data)
+    result = Admin::UnitClient.new(@token).create(payload)
     if result.success?
       redirect_to admin_unit_index_path, notice: "Successfully created unit %s" % payload[:gov_id]
       session.delete(:unit_data)
