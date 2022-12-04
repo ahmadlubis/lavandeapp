@@ -9,12 +9,12 @@
 
   <div class="field form-group">
     <%= f.label :tower, class: "form-label" %>
-    <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, class: "form-select mt-1" %>
+    <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower" }, class: "form-select mt-1" %>
   </div>
 
   <div class="field form-group">
     <%= f.label :floor, class: "form-label" %>
-    <%= f.select :floor, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
+    <%= f.select :floor, [*1..35], { prompt: "Floor" }, class: "form-select mt-1" %>
   </div>
 
   <div class="field form-group">
