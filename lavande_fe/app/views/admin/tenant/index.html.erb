@@ -31,28 +31,28 @@
           <th scope="col">Floor</th>
           <th scope="col">Unit No</th>
           <th scope="col">Gov ID</th>
-          <%# <th scope="col">Action</th> %>
+          <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
           <% if @result["tenants"] %>
             <% @result["tenants"]["data"].each_with_index do |val, i| %>
               <tr>
-                <th scope="row"><%= i + 1 %></th>
-                <td><%= val["role"] %></td>
-                <td><%= val["user"]["email"] %></td>
-                <td><%= val["user"]["name"] %></td>
-                <td><%= val["unit"]["tower"] %></td>
-                <td><%= val["unit"]["floor"] %></td>
-                <td><%= val["unit"]["unit_no"] %></td>
-                <td><%= val["unit"]["gov_id"] %></td>
-                <%# <td> %>
-                  <%#= form_with url: delete_admin_tenant_index_path, :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
-                    <%#= f.hidden_field :unit_id, value: val["unit"]["id"] %>
-                    <%#= f.hidden_field :user_id, value: val["user"]["id"] %>
-                    <%#= f.submit "Delete", :name => nil, class: "btn btn-danger" %>
-                  <%# <% end %>
-                <%# </td> %>
+                <th scope="row" class="align-middle"><%= i + 1 %></th>
+                <td class="align-middle"><%= val["role"] %></td>
+                <td class="align-middle"><%= val["user"]["email"] %></td>
+                <td class="align-middle"><%= val["user"]["name"] %></td>
+                <td class="align-middle"><%= val["unit"]["tower"] %></td>
+                <td class="align-middle"><%= val["unit"]["floor"] %></td>
+                <td class="align-middle"><%= val["unit"]["unit_no"] %></td>
+                <td class="align-middle"><%= val["unit"]["gov_id"] %></td>
+                <td class="align-middle">
+                  <%= form_with url: delete_admin_tenant_index_path, :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
+                    <%= f.hidden_field :unit_id, value: val["unit"]["id"] %>
+                    <%= f.hidden_field :user_id, value: val["user"]["id"] %>
+                    <%= f.submit "Delete", :name => nil, class: "btn btn-danger" %>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           <% end %>

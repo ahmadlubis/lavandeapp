@@ -21,16 +21,22 @@ func NewUserListHandler(usecase usecase.UserListUsecase) handler.Handler {
 func (h *userListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 
-	limit, err := strconv.ParseUint(query.Get("limit"), 10, 64)
-	if err != nil {
-		return model.NewExpectedError("limit must be a number", "USER_INVALID", http.StatusBadRequest, "")
+	var ID, limit, offset uint64
+	var err error
+	if query.Get("id") != "" {
+		if ID, err = strconv.ParseUint(query.Get("id"), 10, 64); err != nil {
+			return model.NewExpectedError("id must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
+		}
 	}
-	offset, err := strconv.ParseUint(query.Get("offset"), 10, 64)
-	if err != nil {
-		return model.NewExpectedError("offset must be a number", "USER_INVALID", http.StatusBadRequest, "")
+	if limit, err = strconv.ParseUint(query.Get("limit"), 10, 64); err != nil {
+		return model.NewExpectedError("limit must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
+	}
+	if offset, err = strconv.ParseUint(query.Get("offset"), 10, 64); err != nil {
+		return model.NewExpectedError("offset must be a number", "UNIT_INVALID", http.StatusBadRequest, "")
 	}
 
 	req := request.ListUserRequest{
+		ID:		  ID,
 		Name:     query.Get("name"),
 		NIK:      query.Get("nik"),
 		Email:    query.Get("email"),

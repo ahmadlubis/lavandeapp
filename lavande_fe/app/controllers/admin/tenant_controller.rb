@@ -219,6 +219,7 @@ class Admin::TenantController < ApplicationController
     query = params.permit(:tenant_page, :unit_id, :user_id)
     query[:unit_id] = query[:unit_id].to_i
     query[:user_id] = query[:user_id].to_i
+    query[:active_only] = true
     query[:page] = query.delete :tenant_page
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = (query[:page] - 1) * PAGINATION_LIMIT
