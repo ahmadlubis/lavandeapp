@@ -1,28 +1,28 @@
-<div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-    </a>
+<div>
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <div class="col-md-auto">
+      <%= link_to image_tag("logo.svg"), root_path %>
+    </div>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><%= link_to "Home", user_index_path, class:"nav-link px-2 link-secondary" %></li>
-        <% if logged_in %>
-            <% if is_admin %>
-                <li><%= link_to "Users", admin_user_index_path, class:"nav-link px-2 link-dark" %></li>
-                <li><%= link_to "Units", admin_unit_index_path, class:"nav-link px-2 link-dark" %></li>
-                <li><%= link_to "Tenants", admin_tenant_index_path, class:"nav-link px-2 link-dark" %></li>
-            <% else %>
-                <li><%= link_to "Owned Units", unit_index_path, class:"nav-link px-2 link-secondary" %></li>
-            <% end %>
+      <li><%= link_to "Home", user_index_path, class:"nav-link px-2 link-secondary" %></li>
+      <% if logged_in %>
+        <% if is_admin %>
+          <li><%= link_to "Users", admin_user_index_path, class:"nav-link px-2 link-dark" %></li>
+          <li><%= link_to "Units", admin_unit_index_path, class:"nav-link px-2 link-dark" %></li>
+          <li><%= link_to "Tenants", admin_tenant_index_path, class:"nav-link px-2 link-dark" %></li>
+        <% else %>
+          <li><%= link_to "Owned Units", unit_index_path, class:"nav-link px-2 link-secondary" %></li>
         <% end %>
+      <% end %>
     </ul>
 
-    <div class="col-md-3 text-end">
-        <% unless logged_in %>
-            <%= link_to "Register", new_user_path, class:"btn btn-primary" %>
-        <% else %>
-            <%= link_to "Logout", session_path(get_user_id), data: { turbo_method: :delete }, class:"btn btn-outline-primary me-2" %>
-        <% end %>
+    <div class="col-md-auto text-end">
+      <% unless logged_in %>
+        <%= link_to "Register", new_user_path, class:"btn btn-primary" %>
+      <% else %>
+        <%= link_to "Logout", session_path(get_user_id), data: { turbo_method: :delete }, class:"btn btn-outline-primary me-2" %>
+      <% end %>
     </div>
-    </header>
+  </header>
 </div>
