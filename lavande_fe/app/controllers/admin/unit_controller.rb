@@ -6,7 +6,9 @@ class Admin::UnitController < ApplicationController
     unit_input = unit_list_query
     if unit_input[:tower].present? && unit_input[:floor].present? && unit_input[:unit_no].present?
       @units ||= session[:units]
+      unit_input[:limit] = 50
       result = Admin::UnitClient.new(@token).index(unit_input)
+      p result
       if result.success?
         unless result.parsed_response['data'].empty?
           @cur_unit = result.parsed_response['data'][0]
