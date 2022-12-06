@@ -2,30 +2,9 @@ class UserController < ApplicationController
   skip_before_action :check_session, only: [:new, :create]
 
   def index
-    # Check for access token
-    # token = cookies[:access_token]
-    # unless token.nil?
-    #   user_data = UserClient.new.get(token)
-    #   unless user_data.nil?
-    #     session[:user_id] = user_data['id']
-    #     session[:role] = user_data['role']
-    #     @user = User.new(user_data)
-    #   else
-    #     redirect_to new_session_path
-    #   end
-    # else
-    #   redirect_to new_session_path
-    # end
     result = UserClient.new.get(@token)
     if result.success?
       user_data = result.parsed_response
-      # unless user_data.nil?
-      #   session[:user_id] = user_data['id']
-      #   session[:role] = user_data['role']
-      #   @user = User.new(user_data)
-      # else
-      #   redirect_to new_session_path
-      # end
       session[:user_id] = user_data['id']
       session[:role] = user_data['role']
       @user = User.new(user_data)
@@ -62,22 +41,6 @@ class UserController < ApplicationController
   end
 
   def edit
-    # TODO: Prevent request?
-    # token = cookies[:access_token]
-    # unless token.nil?
-    #   user_data = UserClient.new.get(token)
-    #   unless user_data.nil?
-    #     session[:user_id] = user_data['id']
-    #     session[:role] = user_data['role']
-    #     @user = User.new(user_data)
-    #   else
-    #     flash[:alert] = "An error occurred when retrieving user data"
-    #     redirect_to user_index_path
-    #   end
-    # else
-    #   flash[:alert] = "An error occurred when retrieving user data"
-    #   redirect_to user_index_path
-    # end
     result = UserClient.new.get(@token)
     if result.success?
       user_data = result.parsed_response
@@ -90,20 +53,6 @@ class UserController < ApplicationController
   end
 
   def update
-    # token = cookies[:access_token]
-    # unless token.nil?
-    #   result = UserClient.new.update(user_params, token)
-    #   unless result.nil?
-    #     flash[:notice] = "Successfully updated user data"
-    #     redirect_to user_index_path
-    #   else
-    #     flash[:alert] = "An error occurred when updating user data"
-    #     redirect_back(fallback_location: user_index_path)
-    #   end
-    # else
-    #   flash[:alert] = "An error occurred when updating user data"
-    #   redirect_to user_index_path
-    # end
     user_data = user_edit_params
     if !user_data[:password].blank?
       # Check password

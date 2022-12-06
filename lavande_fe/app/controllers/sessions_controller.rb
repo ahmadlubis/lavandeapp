@@ -11,25 +11,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # response = UserClient.new.login(session_params) 
-    # unless response.nil?
-    #   session[:is_logged_in] = true
-    #   # cookies[:access_token] = response['access_token']
-    #   p response['access_token']
-    #   cookies[:access_token] = { value: response['access_token'], expires: Time.parse(response['expired_at']) }
-
-    #   # if params[:remember_name]
-    #   #   cookies[:email] = user.email
-    #   #   cookies[:password] = user.password
-    #   # else
-    #   #   cookies.delete(:email)
-    #   #   cookies.delete(:password)
-    #   # end
-
-    #   redirect_to user_index_path, notice: "Logged in"
-    # else
-    #   flash[:alert] = "An error occured when logging in"
-    # end
     login_data = session_params
     session[:login_data] = login_data.except(:password)
     result = UserClient.new.login(login_data)
