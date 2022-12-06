@@ -20,22 +20,22 @@
     <% if params[:user_id].present? || params[:unit_id].present? %>
       <br/>
       <h2 class="card-title">Tenant List</h2>
-      <table class="table mt-2">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Role</th>
-          <th scope="col">Email</th>
-          <th scope="col">Name</th>
-          <th scope="col">Tower</th>
-          <th scope="col">Floor</th>
-          <th scope="col">Unit No</th>
-          <th scope="col">Gov ID</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-          <% if @result["tenants"] %>
+      <% if @result["tenants"] && !@result["tenants"]["data"].empty? %>
+        <table class="table mt-2">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Role</th>
+            <th scope="col">Email</th>
+            <th scope="col">Name</th>
+            <th scope="col">Tower</th>
+            <th scope="col">Floor</th>
+            <th scope="col">Unit No</th>
+            <th scope="col">Gov ID</th>
+            <th scope="col">Action</th>
+          </tr>
+          </thead>
+          <tbody>
             <% @result["tenants"]["data"].each_with_index do |val, i| %>
               <tr>
                 <th scope="row" class="align-middle"><%= i + 1 %></th>
@@ -55,11 +55,9 @@
                 </td>
               </tr>
             <% end %>
-          <% end %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
 
-      <% if @result["tenants"] %>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item"><a class="page-link <% if params[:tenant_page] == 1 %>disabled<% end %>" id="tenant-page-prev" page="<%= params[:tenant_page] - 1 %>">Previous</a></li>
@@ -69,9 +67,13 @@
             <li class="page-item"><a class="page-link <% if params[:tenant_page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="tenant-page-next" page="<%= params[:tenant_page] + 1 %>">Next</a></li>
           </ul>
         </nav>
+      <% else %>
+        <div class="mt-3">
+          <p>Tidak ada tenant</p>
+        </div>
       <% end %>
 
-      <% unless params[:user_id].present? && params[:unit_id].present? && @result["tenants"].present? %>
+      <% unless params[:user_id].present? && params[:unit_id].present? && (@result["tenants"] && !@result["tenants"]["data"].empty?) %>
         <%= form_with url: new_admin_tenant_path, method: :get do |f| %>
           <% if params[:user_id] %>
             <%= f.hidden_field :user_id, value: params[:user_id] %>
