@@ -20,9 +20,10 @@ class Admin::UnitController < ApplicationController
     elsif unit_input[:tower].present? && unit_input[:floor].present?
       @units ||= []
       result = Admin::UnitClient.new(@token).index(unit_input)
+      p result
       if result.success?
         for unit in result.parsed_response['data'] do
-          @units << [unit['gov_id'], unit['unit_no'].to_i]
+          @units << [unit['gov_id'], unit['unit_no']]
         end
         session[:units] = @units
       else

@@ -27,9 +27,6 @@
               <%= f.select :unit_no, @units, { prompt: "Unit", selected: params[:unit_no] }, class: "form-select", id: "unitSelect", onchange: "this.form.submit()" %>
           </div>
         <% end %>
-        <%# <div class="col-auto"> %>
-            <%# <%= f.submit "Search", :name => nil, class: "btn btn-primary" %>
-        <%# </div> %>
       </div>
     <% end %>
 
@@ -37,7 +34,7 @@
     <% if @cur_unit.present? %>
       <p>Gov ID: <%= @cur_unit['gov_id'] %></p>
       <p>Tower <%= @cur_unit['tower'] %> / Floor <%= @cur_unit['floor'] %> / Unit No. <%= @cur_unit['unit_no'] %></p>
-      <%= button_to "Edit", edit_admin_unit_path(@cur_unit['id']), method: :get, class:"btn btn-secondary" %>
+      <%= button_to "Edit", edit_admin_unit_path(@cur_unit['id']), method: :get, class:"btn btn-primary" %>
     <% end %>
 
     <% if (params[:tower].present? && params[:floor].present?) && !@units.present? && !@cur_unit.present? %>
