@@ -43,9 +43,7 @@ class Admin::TenantController < ApplicationController
     end
     
     if params[:tower].present? || params[:floor].present? || params[:gov_id].present?
-      p unit_list_query
       units = unit_client.index(unit_list_query)
-      p units
       if units.success?
         @result["units"] = units.parsed_response
       else
@@ -209,7 +207,7 @@ class Admin::TenantController < ApplicationController
     params[:unit_page] = params[:unit_page].to_i
     query = {}
     # Override tower & floor if gov_id exists
-    if params[:gov_id]
+    if params[:gov_id].present?
       query = params.permit(:unit_page, :gov_id)
     else
       query = params.permit(:unit_page, :tower, :floor)

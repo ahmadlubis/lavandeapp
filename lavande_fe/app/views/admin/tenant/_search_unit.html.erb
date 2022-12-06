@@ -10,7 +10,7 @@
     </div>
     <div class="mt-2">
       <label for="floor">Floor</label>
-      <%= f.select :floor, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
+      <%= f.select :floor, [*1..35], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
     </div>
     <div class="mt-2">
       <label for="gov_id">Gov ID</label>
@@ -20,50 +20,56 @@
   <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
 
-<%= form_with url: url_path, method: :get, class: "w-50" do |f| %>
+<%= form_with url: url_path, method: :get do |f| %>
   <% if params[:user_id] %>
     <%= f.hidden_field :user_id, value: params[:user_id] %>
   <% end %>
 
   <% if @result["units"] %>
-    <table class="table mt-2">
-      <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">#</th>
-        <th scope="col">Gov ID</th>
-        <th scope="col">Tower</th>
-        <th scope="col">Floor</th>
-        <th scope="col">Unit No</th>
-      </tr>
-      </thead>
-      <tbody>
-        <% @result["units"]["data"].each_with_index do |val, i| %>
-          <tr>
-            <th><%= f.radio_button :unit_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
-            <td><%= i + 1 %></td>
-            <td><%= val["gov_id"] %></td>
-            <td><%= val["tower"] %></td>
-            <td><%= val["floor"] %></td>
-            <td><%= val["unit_no"] %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <% unless @result["units"]["data"].empty? %>
+      <table class="table mt-2">
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">#</th>
+          <th scope="col">Gov ID</th>
+          <th scope="col">Tower</th>
+          <th scope="col">Floor</th>
+          <th scope="col">Unit No</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @result["units"]["data"].each_with_index do |val, i| %>
+            <tr>
+              <th><%= f.radio_button :unit_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
+              <td><%= i + 1 %></td>
+              <td><%= val["gov_id"] %></td>
+              <td><%= val["tower"] %></td>
+              <td><%= val["floor"] %></td>
+              <td><%= val["unit_no"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
 
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link <% if params[:unit_page] == 1 %>disabled<% end %>" id="unit-page-prev" page="<%= params[:unit_page] - 1 %>">Previous</a></li>
-        <% (1..(@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil).each do |v| %>
-        <li class="page-item"><a class="page-link <% if params[:unit_page] == v %>active<% end %>" id="unit-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
-        <% end %>
-        <li class="page-item"><a class="page-link <% if params[:unit_page] == (@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="unit-page-next" page="<%= params[:unit_page] + 1 %>">Next</a></li>
-      </ul>
-    </nav>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link <% if params[:unit_page] == 1 %>disabled<% end %>" id="unit-page-prev" page="<%= params[:unit_page] - 1 %>">Previous</a></li>
+          <% (1..(@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil).each do |v| %>
+          <li class="page-item"><a class="page-link <% if params[:unit_page] == v %>active<% end %>" id="unit-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+          <% end %>
+          <li class="page-item"><a class="page-link <% if params[:unit_page] == (@result["units"]["meta"]["total"].to_f / @result["units"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="unit-page-next" page="<%= params[:unit_page] + 1 %>">Next</a></li>
+        </ul>
+      </nav>
 
-    <div class="actions">
-      <%= f.submit "Select Unit", :name => nil, class: "btn btn-primary" %>
-    </div>
+      <div class="actions">
+        <%= f.submit "Select Unit", :name => nil, class: "btn btn-primary" %>
+      </div>
+    <% else %>
+      <div class="mt-3">
+        <p>Tidak ada unit yang sesuai dengan pencarian</p>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
 

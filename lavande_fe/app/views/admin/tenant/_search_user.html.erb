@@ -16,48 +16,54 @@
   <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
 
-<%= form_with url: admin_tenant_index_path, method: :get, class: "w-50" do |f| %>
+<%= form_with url: admin_tenant_index_path, method: :get do |f| %>
   <% if params[:unit_id] %>
     <%= f.hidden_field :unit_id, value: params[:unit_id] %>
   <% end %>
 
   <% if @result["users"] %>
-    <table class="table mt-2">
-      <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">#</th>
-        <th scope="col">Role</th>
-        <th scope="col">Email</th>
-        <th scope="col">Name</th>
-      </tr>
-      </thead>
-      <tbody>
-        <% @result["users"]["data"].each_with_index do |val, i| %>
-          <tr>
-            <th><%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
-            <td><%= i + 1 %></td>
-            <td><%= val["role"] %></td>
-            <td><%= val["email"] %></td>
-            <td><%= val["name"] %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <% unless @result["users"]["data"].empty? %>
+      <table class="table mt-2">
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">#</th>
+          <th scope="col">Role</th>
+          <th scope="col">Email</th>
+          <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @result["users"]["data"].each_with_index do |val, i| %>
+            <tr>
+              <th><%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true, checked: i == 0 %></th>
+              <td><%= i + 1 %></td>
+              <td><%= val["role"] %></td>
+              <td><%= val["email"] %></td>
+              <td><%= val["name"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
 
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link <% if params[:user_page] == 1 %>disabled<% end %>" id="user-page-prev" page="<%= params[:user_page] - 1 %>">Previous</a></li>
-        <% (1..(@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil).each do |v| %>
-        <li class="page-item"><a class="page-link <% if params[:user_page] == v %>active<% end %>" id="user-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
-        <% end %>
-        <li class="page-item"><a class="page-link <% if params[:user_page] == (@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="unit-page-next" page="<%= params[:user_page] + 1 %>">Next</a></li>
-      </ul>
-    </nav>
-    
-     <div class="actions">
-      <%= f.submit "Select Unit", :name => nil, class: "btn btn-primary" %>
-    </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link <% if params[:user_page] == 1 %>disabled<% end %>" id="user-page-prev" page="<%= params[:user_page] - 1 %>">Previous</a></li>
+          <% (1..(@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil).each do |v| %>
+          <li class="page-item"><a class="page-link <% if params[:user_page] == v %>active<% end %>" id="user-page-<%= v %>" page="<%= v %>"><%= v %></a></li>
+          <% end %>
+          <li class="page-item"><a class="page-link <% if params[:user_page] == (@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" id="unit-page-next" page="<%= params[:user_page] + 1 %>">Next</a></li>
+        </ul>
+      </nav>
+      
+      <div class="actions">
+        <%= f.submit "Select User", :name => nil, class: "btn btn-primary" %>
+      </div>
+    <% else %>
+      <div class="mt-3">
+        <p>Tidak ada user yang sesuai dengan pencarian</p>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
 
