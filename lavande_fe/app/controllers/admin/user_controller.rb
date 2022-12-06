@@ -3,17 +3,20 @@ class Admin::UserController < ApplicationController
   PAGINATION_LIMIT = 10
 
   def index
-    result = Admin::UserClient.new(@token).index(user_list_query)
-    if result.success?
-      user_data = result.parsed_response['data']
-      users ||= []
+    @result = {}
+
+    users = Admin::UserClient.new(@token).index(user_list_query)
+    if users.success?
+      user_data = users.parsed_response["data"]
+      users_arr ||= []
       for user in user_data do
-        users << User.new(user)
+        users_arr << User.new(user)
       end
-      result['data'] = users
-      @result = result
+      @result["data"] = users_arr
+      @result["meta"] = users.parsed_response["meta"]
+      p @result
     else
-      err_msg = result.parsed_response['error_message']
+      err_msg = result.parsed_response["error_message"]
       redirect_back fallback_location: admin_user_index_path, alert: "An error occurred when fetching users: %s" % err_msg
     end
   end
@@ -26,12 +29,12 @@ class Admin::UserController < ApplicationController
     result = Admin::UserClient.new(@token).status(payload)
     if result.success?
       status_action = "activated"
-      if payload['status'] == "nonactive"
+      if payload["status"] == "nonactive"
         status_action = "deactivated"
       end
       redirect_back fallback_location: admin_user_index_path, notice: "Successfully %s user %s" % [status_action, params[:name]]
     else
-      err_msg = result.parsed_response['error_message']
+      err_msg = result.parsed_response["error_message"]
       redirect_back fallback_location: admin_user_index_path, alert: "An error occurred when updating user status: %s" % err_msg
     end
   end
@@ -44,7 +47,7 @@ class Admin::UserController < ApplicationController
     if result.success?
       redirect_back fallback_location: admin_user_index_path, notice: "Successfully set user %s as superadmin" % params[:name]
     else
-      err_msg = result.parsed_response['error_message']
+      err_msg = result.parsed_response["error_message"]
       redirect_back fallback_location: admin_user_index_path, alert: "An error occurred when elevating user: %s" % err_msg
     end
   end
