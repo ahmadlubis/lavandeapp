@@ -9,3 +9,7 @@
 	border-color: #985ECF !important;
 	--bs-btn-hover-bg: none !important;
 }
+
+.div-header{
+    background-color: white;
+}
