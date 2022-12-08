@@ -1,72 +1,77 @@
-<h2 class="card-title">Add Tenant for Unit <%= @result["unit"]["gov_id"] %></h2>
-<br/>
-
-<%= form_with url: unit_tenant_index_path, method: :get, class: "w-50" do |f| %>
-  <div class="row">
-    <div class="col">
-      <label for="email">Email</label>
-      <%= f.email_field :email, autofocus: true, class: "form-control mt-1", autocomplete: "email", value: params[:email] %>
-    </div>
-    <div class="col">
-      <label for="name">Name</label>
-      <%= f.text_field :name, autofocus: true, class: "form-control mt-1", value: params[:name] %>
-    </div>
-  </div>
-  <%= f.submit "Search User", class: "btn btn-secondary mt-3", style: "float: left;" %>
-<% end %>
-<br/>
-<%= form_with url: unit_tenant_index_path, method: "post", class: "w-50" do |f| %>
-  <fieldset disabled>
-    <%= f.hidden_field :unit_id, value: @result["unit"]["id"] %>
-  </fieldset>
-
-  <table class="table mt-5">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Email</th>
-      <th scope="col">Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% if @result["users"] %>
-      <% @result["users"]["data"].each_with_index do |val, i| %>
-        <tr>
-          <th scope="row">
-            <div class="form-check">
-              <%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true %> <%= i + 1 %>
+<div class="jumbotron">
+  <div class="card mb-4 w-100" style="max-width: 750px">
+    <div class="card-body">
+      <h2 class="card-title">Add Tenant for Unit <%= @result["unit"]["gov_id"] %></h2>
+      <div class="w-100">
+        <%= form_with url: unit_tenant_index_path, method: :get do |f| %>
+          <div class="row">
+            <div class="col">
+              <label for="email">Email</label>
+              <%= f.email_field :email, autofocus: true, class: "form-control mt-1", autocomplete: "email", value: params[:email] %>
             </div>
-          </th>
-          <td><%= val["email"] %></td>
-          <td><%= val["name"] %></td>
-        </tr>
-      <% end %>
-    <% end %>
-    </tbody>
-  </table>
+            <div class="col">
+              <label for="name">Name</label>
+              <%= f.text_field :name, autofocus: true, class: "form-control mt-1", value: params[:name] %>
+            </div>
+          </div>
+          <%= f.submit "Search User", class: "btn btn-secondary mt-3", style: "float: left;" %>
+        <% end %>
+        <%= form_with url: unit_tenant_index_path, method: "post", class: "w-50" do |f| %>
+          <fieldset disabled>
+            <%= f.hidden_field :unit_id, value: @result["unit"]["id"] %>
+          </fieldset>
 
-  <%# if @result["users"] %>
-<!--    <nav aria-label="Page navigation example">-->
-<!--      <ul class="pagination">-->
-<!--        <li class="page-item"><a class="page-link <%# if params[:page] == 1 %>disabled<%# end %>" page="<%#= params[:page] - 1 %>">Previous</a></li>-->
-        <%# (1..(@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil).each do |v| %>
-<!--          <li class="page-item"><a class="page-link <%# if params[:page] == v %>active<%# end %>" page="<%#= v %>"><%#= v %></a></li>-->
-        <%# end %>
-<!--        <li class="page-item"><a class="page-link <%# if params[:page] == (@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil %>disabled<%# end %>" page="<%#= params[:page] + 1 %>">Next</a></li>-->
-<!--      </ul>-->
-<!--    </nav>-->
-  <%# end %>
+          <table class="table mt-5">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Name</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% if @result["users"] %>
+                <% @result["users"]["data"].each_with_index do |val, i| %>
+                  <tr>
+                    <th scope="row">
+                      <div class="form-check">
+                        <%= f.radio_button :user_id, val["id"], class: "form-check-input", required: true %> <%= i + 1 %>
+                      </div>
+                    </th>
+                    <td><%= val["email"] %></td>
+                    <td><%= val["name"] %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+              </tbody>
+            </table>
 
-  <div class="field form-group">
-    <%= f.label :role, "Role", class: "form-label" %>
-    <%= f.select :role, [%w[Renter renter], %w[Resident resident], %w[Staff staff]], {}, class: "form-select" %>
+          <%# if @result["users"] %>
+          <!--    <nav aria-label="Page navigation example">-->
+          <!--      <ul class="pagination">-->
+          <!--        <li class="page-item"><a class="page-link <%# if params[:page] == 1 %>disabled<%# end %>" page="<%#= params[:page] - 1 %>">Previous</a></li>-->
+          <%# (1..(@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil).each do |v| %>
+          <!--          <li class="page-item"><a class="page-link <%# if params[:page] == v %>active<%# end %>" page="<%#= v %>"><%#= v %></a></li>-->
+          <%# end %>
+          <!--        <li class="page-item"><a class="page-link <%# if params[:page] == (@result["users"]["meta"]["total"].to_f / @result["users"]["meta"]["limit"].to_f).ceil %>disabled<%# end %>" page="<%#= params[:page] + 1 %>">Next</a></li>-->
+          <!--      </ul>-->
+          <!--    </nav>-->
+          <%# end %>
+
+          <div class="field form-group">
+            <%= f.label :role, "Role", class: "form-label" %>
+            <%= f.select :role, [%w[Renter renter], %w[Resident resident], %w[Staff staff]], {}, class: "form-select" %>
+          </div>
+          <br/>
+
+          <div class="actions">
+            <%= f.submit "Add", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-  <br/>
-
-  <div class="actions">
-    <%= f.submit "Add", class: "btn btn-primary" %>
-  </div>
-<% end %>
+</div>
 
 <!--<script>-->
 <!--    var elements = document.getElementsByClassName("page-link");-->

@@ -6,85 +6,94 @@
     <title>Unit List by Owner</title>
   </head>
   <body>
-    <%= form_with url: unit_index_path, method: :get do |f| %>
-      <div class="row">
-        <div class="col">
-          <label for="tower">Tower</label>
-          <%= f.select :tower, ["", "A", "B", "C"], { selected: params[:tower] }, class: "form-select mt-1" %>
-        </div>
-        <div class="col">
-          <label for="floor">Floor</label>
-          <%= f.select :floor, ["", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"], { selected: params[:floor] }, class: "form-select mt-1" %>
-        </div>
-      </div>
-      <% if @err_msg %>
-        <div class="alert alert-danger mt-2" role="alert">
-          <%= @err_msg %>
-        </div>
-      <% end %>
-      <%= f.submit "Search", :name => nil, class: "btn btn-primary mt-3" %>
-    <% end %>
-
-    <table class="table mt-5">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Gov ID</th>
-        <th scope="col">Tower</th>
-        <th scope="col">Floor</th>
-        <th scope="col">Unit No</th>
-        <th scope="col">AJB</th>
-        <th scope="col">Akte</th>
-        <th scope="col">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% if @result %>
-      <% @result["data"].each_with_index do |val, i| %>
-      <tr>
-        <th scope="row"><%= i + 1 %></th>
-        <td><%= val["gov_id"] %></td>
-        <td><%= val["tower"] %></td>
-        <td><%= val["floor"] %></td>
-        <td><%= val["unit_no"] %></td>
-        <td>
-          <% if val["ajb"].present? %>
-            <a href="data:image/png;base64,<%= val["ajb"] %>" download="ajb-<%= val["gov_id"] %>-.pdf">
-            <button type="button" class="btn btn-info">Download</button>
-            </a>
-          <% else %>
-            <button type="button" class="btn btn-dark disabled">No File</button>
+  <div class="jumbotron">
+    <div class="card mb-4 w-100">
+      <div class="card-body">
+        <h2 class="card-title">List Unit</h2>
+        <%= form_with url: unit_index_path, method: :get do |f| %>
+          <div class="row">
+            <div class="col">
+              <label for="tower">Tower</label>
+              <%= f.select :tower, ["", "A", "B", "C"], { selected: params[:tower] }, class: "form-select mt-1" %>
+            </div>
+            <div class="col">
+              <label for="floor">Floor</label>
+              <%= f.select :floor, ["", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"], { selected: params[:floor] }, class: "form-select mt-1" %>
+            </div>
+          </div>
+          <% if @err_msg %>
+            <div class="alert alert-danger mt-2" role="alert">
+              <%= @err_msg %>
+            </div>
           <% end %>
-        </td>
-        <td>
-          <% if val["akte"].present? %>
-            <a href="data:image/png;base64,<%= val["akte"] %>" download="akte-<%= val["gov_id"] %>-.pdf">
-              <button type="button" class="btn btn-info">Download</button>
-            </a>
-          <% else %>
-            <button type="button" class="btn btn-dark disabled">No File</button>
-          <% end %>
-        </td>
-        <td>
-          <%= button_to "Edit Unit", unit_path(val["id"]), method: :get, class:"btn btn-primary" %>
-        </td>
-      </tr>
-      <% end %>
-      <% end %>
-      </tbody>
-    </table>
-
-    <% if @result %>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
-        <% (1..(@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil).each do |v| %>
-        <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+          <%= f.submit "Search", :name => nil, class: "btn btn-primary mt-3" %>
         <% end %>
-        <li class="page-item"><a class="page-link <% if params[:page] == (@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
-      </ul>
-    </nav>
-    <% end %>
+
+        <div class="table-responsive">
+          <table class="table mt-5">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Gov ID</th>
+              <th scope="col">Tower</th>
+              <th scope="col">Floor</th>
+              <th scope="col">Unit No</th>
+              <th scope="col">AJB</th>
+              <th scope="col">Akte</th>
+              <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if @result %>
+              <% @result["data"].each_with_index do |val, i| %>
+                <tr>
+                  <th scope="row"><%= i + 1 %></th>
+                  <td><%= val["gov_id"] %></td>
+                  <td><%= val["tower"] %></td>
+                  <td><%= val["floor"] %></td>
+                  <td><%= val["unit_no"] %></td>
+                  <td>
+                    <% if val["ajb"].present? %>
+                      <a href="data:image/png;base64,<%= val["ajb"] %>" download="ajb-<%= val["gov_id"] %>-.pdf">
+                        <button type="button" class="btn btn-info">Download</button>
+                      </a>
+                    <% else %>
+                      <button type="button" class="btn btn-dark disabled">No File</button>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if val["akte"].present? %>
+                      <a href="data:image/png;base64,<%= val["akte"] %>" download="akte-<%= val["gov_id"] %>-.pdf">
+                        <button type="button" class="btn btn-info">Download</button>
+                      </a>
+                    <% else %>
+                      <button type="button" class="btn btn-dark disabled">No File</button>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= button_to "Edit Unit", unit_path(val["id"]), method: :get, class:"btn btn-primary" %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <% if @result %>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
+              <% (1..(@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil).each do |v| %>
+                <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+              <% end %>
+              <li class="page-item"><a class="page-link <% if params[:page] == (@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
+            </ul>
+          </nav>
+        <% end %>
+      </div>
+    </div>
+  </div>
   </body>
 </html>
 

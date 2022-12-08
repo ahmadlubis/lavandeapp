@@ -1,107 +1,116 @@
-<h2 class="card-title">Update Unit</h2>
-<%= form_with url: unit_path(@result["unit"]["id"]), method: "patch", class: "w-50" do |f| %>
-  <fieldset disabled>
-    <%= f.hidden_field :id, value: @result["unit"]["id"] %>
+<div class="jumbotron">
+  <div class="card mb-4 w-100" style="max-width: 750px">
+    <div class="card-body">
+      <h2 class="card-title">Update Unit</h2>
+      <div class="w-100", style="max-width: 500px">
+        <%= form_with url: unit_path(@result["unit"]["id"]), method: "patch" do |f| %>
+          <fieldset disabled>
+            <%= f.hidden_field :id, value: @result["unit"]["id"] %>
 
-    <br />
-    <div class="field form-group mt-2">
-      <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
-      <%= f.text_field :gov_id, class: "form-control disabled", value: @result["unit"]["gov_id"] %>
+            <br />
+            <div class="field form-group mt-2">
+              <%= f.label :gov_id, "Gov ID", class: "form-label" %><br />
+              <%= f.text_field :gov_id, class: "form-control disabled", value: @result["unit"]["gov_id"] %>
+            </div>
+
+            <div class="field form-group mt-2">
+              <%= f.label :tower, class: "form-label" %><br />
+              <%= f.text_field :tower, class: "form-control disabled", value: @result["unit"]["tower"] %>
+            </div>
+
+            <div class="field form-group mt-2">
+              <%= f.label :floor, class: "form-label" %><br />
+              <%= f.text_field :floor, class: "form-control", value: @result["unit"]["floor"] %>
+            </div>
+
+            <div class="field form-group mt-2">
+              <%= f.label :unit_no, "Unit Number", class: "form-label" %><br />
+              <%= f.text_field :unit_no, class: "form-control", value: @result["unit"]["unit_no"] %>
+            </div>
+          </fieldset>
+          <div class="field form-group mt-2">
+            <%= f.label :ajb, "AJB", class: "form-label" %>&nbsp;&emsp;
+            <% if @result["unit"]["ajb"].present? %>
+              <a href="data:image/png;base64,<%= @result["unit"]["ajb"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
+                <button type="button" class="btn btn-info btn-sm">Download</button>
+              </a>
+            <% else %>
+              <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
+            <% end %><br />
+            <%= f.file_field :ajb, class: "form-control" %>
+          </div>
+          <div class="field form-group mt-2">
+            <%= f.label :akte, "Akte", class: "form-label" %>&emsp;
+            <% if @result["unit"]["akte"].present? %>
+              <a href="data:image/png;base64,<%= @result["unit"]["akte"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
+                <button type="button" class="btn btn-info btn-sm">Download</button>
+              </a>
+            <% else %>
+              <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
+            <% end %><br />
+            <%= f.file_field :akte, class: "form-control" %>
+          </div>
+          <br>
+          <div class="actions">
+            <%= f.submit "Update", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
     </div>
-
-    <div class="field form-group mt-2">
-      <%= f.label :tower, class: "form-label" %><br />
-      <%= f.text_field :tower, class: "form-control disabled", value: @result["unit"]["tower"] %>
-    </div>
-
-    <div class="field form-group mt-2">
-      <%= f.label :floor, class: "form-label" %><br />
-      <%= f.text_field :floor, class: "form-control", value: @result["unit"]["floor"] %>
-    </div>
-
-    <div class="field form-group mt-2">
-      <%= f.label :unit_no, "Unit Number", class: "form-label" %><br />
-      <%= f.text_field :unit_no, class: "form-control", value: @result["unit"]["unit_no"] %>
-    </div>
-  </fieldset>
-
-  <div class="field form-group mt-2">
-    <%= f.label :ajb, "AJB", class: "form-label" %>&nbsp;&emsp;
-    <% if @result["unit"]["ajb"].present? %>
-      <a href="data:image/png;base64,<%= @result["unit"]["ajb"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
-        <button type="button" class="btn btn-info btn-sm">Download</button>
-      </a>
-    <% else %>
-      <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
-    <% end %><br />
-    <%= f.file_field :ajb, class: "form-control" %>
   </div>
 
-  <div class="field form-group mt-2">
-    <%= f.label :akte, "Akte", class: "form-label" %>&emsp;
-    <% if @result["unit"]["akte"].present? %>
-      <a href="data:image/png;base64,<%= @result["unit"]["akte"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
-        <button type="button" class="btn btn-info btn-sm">Download</button>
-      </a>
-    <% else %>
-      <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
-    <% end %><br />
-    <%= f.file_field :akte, class: "form-control" %>
-  </div>
+  <div class="card mb-4" style="max-width: 750px">
+    <div class="card-body">
+      <h2 class="card-title">Tenant List</h2>
 
-  <br>
-
-  <div class="actions">
-    <%= f.submit "Update", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<br /><br />
-<h2 class="card-title">Tenant List</h2>
-
-<table class="table mt-5">
-  <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">Role</th>
-    <th scope="col">Email</th>
-    <th scope="col">Name</th>
-    <th scope="col">Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% if @result["tenants"] %>
-    <% @result["tenants"]["data"].each_with_index do |val, i| %>
-      <tr>
-        <th scope="row"><%= i + 1 %></th>
-        <td><%= val["role"] %></td>
-        <td><%= val["user"]["email"] %></td>
-        <td><%= val["user"]["name"] %></td>
-        <td>
-          <%= form_with url: delete_unit_tenant_index_path(@result["unit"]["id"]), method: "post", :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
-            <%= f.hidden_field :unit_id, value: @result["unit"]["id"] %>
-            <%= f.hidden_field :user_id, value: val["user"]["id"] %>
-            <%= f.submit "Delete", class: "btn btn-danger" %>
+      <div class="table-responsive">
+        <table class="table mt-5 w-100" style="min-width: 500px">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Role</th>
+            <th scope="col">Email</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% if @result["tenants"] %>
+            <% @result["tenants"]["data"].each_with_index do |val, i| %>
+              <tr>
+                <th scope="row"><%= i + 1 %></th>
+                <td><%= val["role"] %></td>
+                <td><%= val["user"]["email"] %></td>
+                <td><%= val["user"]["name"] %></td>
+                <td>
+                  <%= form_with url: delete_unit_tenant_index_path(@result["unit"]["id"]), method: "post", :html => { :onsubmit => "return confirm('Are you sure?');" } do |f| %>
+                    <%= f.hidden_field :unit_id, value: @result["unit"]["id"] %>
+                    <%= f.hidden_field :user_id, value: val["user"]["id"] %>
+                    <%= f.submit "Delete", class: "btn btn-danger" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
           <% end %>
-        </td>
-      </tr>
-    <% end %>
-  <% end %>
-  </tbody>
-</table>
-<%= button_to "Add", unit_tenant_index_path(@result["unit"]["id"]), method: :get, class:"btn btn-primary", style: "float: right;" %>
+          </tbody>
+        </table>
+      </div>
+      <%= button_to "Add", unit_tenant_index_path(@result["unit"]["id"]), method: :get, class:"btn btn-primary", style: "float: right;" %>
 
-<% if @result["tenants"] %>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
-      <% (1..(@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil).each do |v| %>
-        <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+      <% if @result["tenants"] %>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
+            <% (1..(@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil).each do |v| %>
+              <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+            <% end %>
+            <li class="page-item"><a class="page-link <% if params[:page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
+          </ul>
+        </nav>
       <% end %>
-      <li class="page-item"><a class="page-link <% if params[:page] == (@result["tenants"]["meta"]["total"].to_f / @result["tenants"]["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
-    </ul>
-  </nav>
-<% end %>
+    </div>
+  </div>
+  </div>
 
 <script>
     var elements = document.getElementsByClassName("page-link");
