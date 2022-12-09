@@ -3,13 +3,14 @@ package user
 import (
 	"context"
 	"errors"
+	"strconv"
+
 	"github.com/ahmadlubis/lavandeapp/config"
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/usecase"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm"
-	"strconv"
 )
 
 type userTokenVerificationUsecase struct {
@@ -37,6 +38,14 @@ func (u *userTokenVerificationUsecase) VerifyToken(ctx context.Context, tokenStr
 
 	if user.Status == entity.UserStatusNonactive {
 		return entity.User{}, model.DeactivatedAccountError
+	}
+	var tenant entity.Tenant
+	if err := u.db.Where("user_id = ? AND role = ?", id, entity.TenantRoleOwner).First(&tenant).Error; err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return entity.User{}, model.NewUnknownError(strconv.FormatUint(id, 10), err)
+		}
+	} else {
+		user.IsOwner = true
 	}
 
 	return user, nil

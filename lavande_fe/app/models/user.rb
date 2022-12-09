@@ -2,7 +2,7 @@ class User
     include ActiveModel::Model
     include ActiveModel::Attributes
 
-    attr_accessor :id, :name, :nik, :email, :phone_no, :role, :status, :religion, :created_at, :updated_at
+    attr_accessor :id, :name, :nik, :email, :phone_no, :role, :status, :religion, :created_at, :updated_at, :is_owner
 
     validates :name, presence: true
     validates :nik, presence: true

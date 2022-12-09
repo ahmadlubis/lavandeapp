@@ -1,10 +1,11 @@
 package entity
 
 import (
-	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"net/http"
 	"regexp"
 	"time"
+
+	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 )
 
 const (
@@ -25,6 +26,7 @@ type User struct {
 	Password  []byte       `gorm:"column:password" json:"-"`
 	CreatedAt time.Time    `gorm:"column:created_at;" json:"created_at"`
 	UpdatedAt time.Time    `gorm:"column:updated_at" json:"updated_at"`
+	IsOwner   bool         `gorm:"-" json:"is_owner"`
 }
 
 func (User) TableName() string {
