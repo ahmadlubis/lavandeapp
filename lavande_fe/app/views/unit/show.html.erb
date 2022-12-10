@@ -29,25 +29,31 @@
             </div>
           </fieldset>
           <div class="field form-group mt-2">
-            <%= f.label :ajb, "AJB", class: "form-label" %>&nbsp;&emsp;
-            <% if @result["unit"]["ajb"].present? %>
-              <a href="data:image/png;base64,<%= @result["unit"]["ajb"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
-                <button type="button" class="btn btn-info btn-sm">Download</button>
-              </a>
-            <% else %>
-              <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
-            <% end %><br />
+            <div class="d-flex flex-row">A
+              <%= f.label :ajb, "AJB", class: "form-label" %>
+              <p class="ms-2 text-danger" style="font-size: 12px;">*pdf max 16MB</p>
+              <% if @result["unit"]["ajb"].present? %>
+                <a href="data:image/png;base64,<%= @result["unit"]["ajb"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf" class="ms-auto">
+                  <button type="button" class="btn btn-info btn-sm">Download</button>
+                </a>
+              <% else %>
+                <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
+              <% end %><br />
+            </div>
             <%= f.file_field :ajb, class: "form-control" %>
           </div>
           <div class="field form-group mt-2">
-            <%= f.label :akte, "Akte", class: "form-label" %>&emsp;
-            <% if @result["unit"]["akte"].present? %>
-              <a href="data:image/png;base64,<%= @result["unit"]["akte"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf">
-                <button type="button" class="btn btn-info btn-sm">Download</button>
-              </a>
-            <% else %>
-              <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
-            <% end %><br />
+            <div class="d-flex flex-row">
+              <%= f.label :akte, "SHMSRS", class: "form-label" %>
+              <p class="ms-2 text-danger" style="font-size: 12px;">*pdf max 16MB</p>
+              <% if @result["unit"]["akte"].present? %>
+                <a href="data:image/png;base64,<%= @result["unit"]["akte"] %>" download="akte-<%= @result["unit"]["gov_id"] %>-.pdf" class="ms-auto">
+                  <button type="button" class="btn btn-info btn-sm">Download</button>
+                </a>
+              <% else %>
+                <button type="button" class="btn btn-dark btn-sm disabled">No File</button>
+              <% end %><br />
+            </div>
             <%= f.file_field :akte, class: "form-control" %>
           </div>
           <br>

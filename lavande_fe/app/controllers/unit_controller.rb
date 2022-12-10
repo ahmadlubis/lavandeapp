@@ -54,7 +54,7 @@ class UnitController < ApplicationController
     end
     if params[:akte].present?
       if params[:akte].content_type != "application/pdf"
-        redirect_back fallback_location: unit_path(params[:id]), alert: "Akte should be a PDF File"
+        redirect_back fallback_location: unit_path(params[:id]), alert: "SHMSRS should be a PDF File"
         return
       end
       payload[:akte] = Base64.encode64(params[:akte].read)
