@@ -11,7 +11,7 @@
           <li><%= link_to "Users", admin_user_index_path, class:"nav-link px-2 link-dark" %></li>
           <li><%= link_to "Units", admin_unit_index_path, class:"nav-link px-2 link-dark" %></li>
           <li><%= link_to "Tenants", admin_tenant_index_path, class:"nav-link px-2 link-dark" %></li>
-        <% else %>
+        <% elsif is_owner %>
           <li><%= link_to "Owned Units", unit_index_path, class:"nav-link px-2 link-secondary" %></li>
         <% end %>
       <% end %>

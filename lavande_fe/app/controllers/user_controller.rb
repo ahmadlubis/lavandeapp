@@ -5,8 +5,10 @@ class UserController < ApplicationController
     result = UserClient.new.get(@token)
     if result.success?
       user_data = result.parsed_response
+      p user_data
       session[:user_id] = user_data['id']
       session[:role] = user_data['role']
+      session[:is_owner] = user_data['is_owner']
       @user = User.new(user_data)
     else
       err_msg = result.parsed_response['error_message']
