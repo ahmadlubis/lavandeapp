@@ -3,6 +3,10 @@ package user
 import (
 	"context"
 	"errors"
+	"net/http"
+	"strconv"
+
+	"github.com/ahmadlubis/lavandeapp/config"
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -11,16 +15,15 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"net/http"
-	"strconv"
 )
 
 type userUpdateUsecase struct {
-	db *gorm.DB
+	cfg config.AuthConfig
+	db  *gorm.DB
 }
 
-func NewUserUpdateUsecase(db *gorm.DB) usecase.UserUpdateUsecase {
-	return &userUpdateUsecase{db: db}
+func NewUserUpdateUsecase(cfg config.AuthConfig, db *gorm.DB) usecase.UserUpdateUsecase {
+	return &userUpdateUsecase{cfg: cfg, db: db}
 }
 
 func (u *userUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequest) (entity.User, error) {
@@ -34,7 +37,7 @@ func (u *userUpdateUsecase) Update(_ context.Context, req request.UpdateUserRequ
 	}
 
 	if req.Password != nil {
-		if err := ValidateUserPassword(*req.Password, *req.Email); err != nil {
+		if err := utility.ValidateUserPassword(*req.Password, *req.Email); err != nil {
 			return entity.User{}, err
 		}
 
@@ -105,4 +108,42 @@ func (u *userUpdateUsecase) AdminUpdate(_ context.Context, req request.AdminUpda
 	}
 
 	return user, nil
+}
+
+func (u *userUpdateUsecase) ResetPassword(_ context.Context, req request.UpdateUserRequest) (string, error) {
+	var err error
+	var user entity.User
+	if err = u.db.Where("email = ?", req.TargetEmail).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return "", model.InvalidTokenError.WithTrackId(req.TargetEmail)
+		}
+		return "", model.NewUnknownError(req.TargetEmail, err)
+	}
+
+	/* Update Password, for now use default password in secret config */
+	newPassword := u.cfg.DefaultPassword
+
+	if err := utility.ValidateUserPassword(newPassword, req.TargetEmail); err != nil { // validate newPassword for due diligence
+		return "", err
+	}
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return "", model.NewUnknownError(*req.Email, err)
+	}
+	user.Password = passwordHash
+
+	/* Save changes */
+	if err := user.Validate(); err != nil {
+		return "", err
+	}
+	if result := u.db.Save(&user); result.Error != nil {
+		if mysqlErr, ok := result.Error.(*mysql.MySQLError); ok {
+			if mysqlErr.Number == utility.MysqlErrorConflictNumber {
+				return "", model.NewExpectedError("another account with the same NIK / Email / PhoneNo already exists", "USER_CONFLICT", http.StatusConflict, req.TargetEmail)
+			}
+		}
+		return "", model.NewUnknownError(req.TargetEmail, result.Error)
+	}
+
+	return newPassword, nil
 }

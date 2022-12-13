@@ -26,7 +26,7 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 	registerUserUsecase := user.NewUserRegistrationUsecase(db)
 	loginUserUsecase := user.NewUserLoginUsecase(cfg.AuthConfig, db)
 	verifyUserTokenUsecase := user.NewUserTokenVerificationUsecase(cfg.AuthConfig, db)
-	updateUserUsecase := user.NewUserUpdateUsecase(db)
+	updateUserUsecase := user.NewUserUpdateUsecase(cfg.AuthConfig, db)
 	listUserUsecase := user.NewUserListUsecase(db)
 	superadminUC := user.NewSuperAdminUsecase(db)
 
@@ -64,6 +64,9 @@ func NewBackendServer(cfg *config.Config) (http.Handler, error) {
 
 	// API to set user as SuperAdmin
 	router.HandleFunc("/v1/admin/set", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewSuperAdminHandler(superadminUC)).ServeHTTP).Methods(http.MethodPut)
+
+	// API to reset tenant's password
+	router.HandleFunc("/v1/admin/tenants/reset-password", middleware.WithDefaultAdminMiddlewares(verifyUserTokenUsecase, adminHandler.NewUserResetPasswordHandler(updateUserUsecase)).ServeHTTP).Methods(http.MethodPatch)
 
 	return router, nil
 }

@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/ahmadlubis/lavandeapp/module/backend/entity"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model"
 	"github.com/ahmadlubis/lavandeapp/module/backend/model/request"
@@ -10,11 +12,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"net/http"
-	"regexp"
 )
-
-const asciiRegex = "^[\\x00-\\x7F]+$"
 
 type userRegistrationUsecase struct {
 	db *gorm.DB
@@ -25,7 +23,7 @@ func NewUserRegistrationUsecase(db *gorm.DB) usecase.UserRegistrationUsecase {
 }
 
 func (u *userRegistrationUsecase) Register(_ context.Context, req request.RegisterUserRequest) (entity.User, error) {
-	if err := ValidateUserPassword(req.Password, req.Email); err != nil {
+	if err := utility.ValidateUserPassword(req.Password, req.Email); err != nil {
 		return entity.User{}, err
 	}
 
@@ -63,14 +61,4 @@ func (u *userRegistrationUsecase) Register(_ context.Context, req request.Regist
 	}
 
 	return user, nil
-}
-
-func ValidateUserPassword(passwd, trackId string) error {
-	if len(passwd) < 8 || len(passwd) > 32 {
-		return model.NewExpectedError("password must be between 8 to 32 characters long", "USER_INVALID", http.StatusBadRequest, trackId)
-	}
-	if match, _ := regexp.MatchString(asciiRegex, passwd); !match {
-		return model.NewExpectedError("password can't contains non-standard characters", "USER_INVALID", http.StatusBadRequest, trackId)
-	}
-	return nil
 }

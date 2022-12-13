@@ -23,5 +23,6 @@ func NewConfig() *Config {
 }
 
 type AuthConfig struct {
-	JWTSecretKey string `env:"JWT_SECRET_KEY"`
+	JWTSecretKey    string `env:"JWT_SECRET_KEY"`
+	DefaultPassword string `env:"DEFAULT_PASSWORD"`
 }

@@ -24,6 +24,7 @@ type UserTokenVerificationUsecase interface {
 type UserUpdateUsecase interface {
 	Update(ctx context.Context, request request.UpdateUserRequest) (entity.User, error)
 	AdminUpdate(ctx context.Context, request request.AdminUpdateUserRequest) (entity.User, error)
+	ResetPassword(ctx context.Context, request request.UpdateUserRequest) (string, error)
 }
 
 type UserListUsecase interface {
