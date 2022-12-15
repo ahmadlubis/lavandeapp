@@ -1,28 +1,50 @@
-<h2>Buat Unit</h2>
-
-<%= form_with url: admin_unit_index_path, class: "w-50" do |f| %>
-  <div class="field form-group">
-    <%= f.label :gov_id, "Gov ID", class: "form-label" %>
-    <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>
-  </div>
-
-  <div class="field form-group mb-2">
-    <%= f.label :tower, class: "form-label" %>
-    <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower", selected: params[:tower] }, class: "form-select mt-1" %>
-  </div>
-  
-  <div class="field form-group">
-    <%= f.label :floor, class: "form-label" %>
-    <%= f.select :floor, [*1..35], { prompt: "Floor", selected: params[:floor] }, class: "form-select mt-1" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :unit_no, "Unit Number", class: "form-label" %>
-    <%= f.text_field :unit_no, autofocus: true, class: "form-control", autocomplete: "unit_no", value: params[:unit_no] %>
-  </div>
-
-  <br>
-  <div class="actions">
-    <%= f.submit "Create", class: "btn btn-secondary" %>
-  </div>
-<% end %>
+<div class="jumbotron">
+  <h2>Buat Unit</h2>
+  <%= form_with url: admin_unit_index_path do |f| %>
+    <div class="card mb-4 w-100" style="max-width: 700px">
+      <div class="card-body">
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :gov_id, "Gov ID", class: "form-label mb-0" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email", value: params[:gov_id] %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :tower, class: "form-label mb-0" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.select :tower, ["A", "B", "C"], { prompt: "", selected: params[:tower] }, class: "form-select" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :floor, class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.select :floor, [*1..35], { prompt: "", selected: params[:floor] }, class: "form-select" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :unit_no, "Unit Number", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :unit_no, autofocus: true, class: "form-control", autocomplete: "unit_no", value: params[:unit_no] %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="ml-5">
+            <%= f.submit "Buat Unit", class: "btn btn-secondary w-25", style: "min-width: 50px" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

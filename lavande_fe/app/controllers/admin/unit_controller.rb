@@ -3,34 +3,12 @@ class Admin::UnitController < ApplicationController
   PAGINATION_LIMIT = 10
 
   def index
-    unit_input = unit_list_query
-    if unit_input[:tower].present? && unit_input[:floor].present? && unit_input[:unit_no].present?
-      @units ||= session[:units]
-      unit_input[:limit] = 50
-      result = Admin::UnitClient.new(@token).index(unit_input)
-      p result
+    result = Admin::UnitClient.new(@token).index(unit_list_query)
       if result.success?
-        unless result.parsed_response['data'].empty?
-          @cur_unit = result.parsed_response['data'][0]
-        end
+        @result = result.parsed_response
       else
-        err_msg = result.parsed_response['error_message']
-        redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when fetching units: %s" % err_msg
+        @err_msg = result.parsed_response['error_message']
       end
-    elsif unit_input[:tower].present? && unit_input[:floor].present?
-      @units ||= []
-      result = Admin::UnitClient.new(@token).index(unit_input)
-      p result
-      if result.success?
-        for unit in result.parsed_response['data'] do
-          @units << [unit['gov_id'], unit['unit_no']]
-        end
-        session[:units] = @units
-      else
-        err_msg = result.parsed_response['error_message']
-        redirect_back fallback_location: admin_unit_index_path, alert: "An error occurred when fetching units: %s" % err_msg
-      end
-    end
   end
 
   def new
@@ -82,27 +60,17 @@ class Admin::UnitController < ApplicationController
   private
 
   def unit_list_query
-    query = {}
-    if params[:tower].present?
-      query[:tower] = params[:tower]
-    end
-    if params[:floor].present?
-      query[:floor] = params[:floor]
-    end
-    if params[:unit_no].present?
-      query[:unit_no] = params[:unit_no]
-    end
-    query[:page] = 1
+    params[:page] ||= 1
+    params[:page] = params[:page].to_i
+    query = params.permit(:page, :tower, :floor)
     query[:limit] = PAGINATION_LIMIT
-    query[:offset] = 0
+    query[:offset] = (query[:page] - 1) * PAGINATION_LIMIT
     query
   end
 
   def edit_unit_query
     params.require(:id)
     query = params.permit(:id)
-    # query[:gov_id] = query[:id]
-    # query.delete(:id)
     query[:page] = 1
     query[:limit] = PAGINATION_LIMIT
     query[:offset] = 0

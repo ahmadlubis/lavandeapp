@@ -1,29 +1,51 @@
-<h2>Edit Unit</h2>
-
-<%= form_with model: @unit, url: admin_unit_path(@unit.id), method: :patch, class: "w-50" do |f| %>
-  <%= f.hidden_field( :id) %>
-  <div class="field form-group">
-    <%= f.label :gov_id, "Gov ID", class: "form-label" %>
-    <%= f.text_field :gov_id, autofocus: true, class: "form-control" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :tower, class: "form-label" %>
-    <%= f.select :tower, ["A", "B", "C"], { prompt: "Tower" }, class: "form-select mt-1" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :floor, class: "form-label" %>
-    <%= f.select :floor, [*1..35], { prompt: "Floor" }, class: "form-select mt-1" %>
-  </div>
-
-  <div class="field form-group">
-    <%= f.label :unit_no, "Unit Number", class: "form-label" %>
-    <%= f.text_field :unit_no, autofocus: true, class: "form-control" %>
-  </div>
-
-  <br>
-  <div class="actions">
-    <%= f.submit "Edit", class: "btn btn-secondary" %>
-  </div>
-<% end %>
+<div class="jumbotron">
+  <h2>Ubah Unit</h2>
+  <%= form_with model: @unit, url: admin_unit_path(@unit.id), method: :patch do |f| %>
+    <%= f.hidden_field(:id) %>
+    <div class="card mb-4 w-100" style="max-width: 700px">
+      <div class="card-body">
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :gov_id, "Gov ID", class: "form-label mb-0" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :gov_id, autofocus: true, class: "form-control", autocomplete: "email" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :tower, class: "form-label mb-0" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.select :tower, ["A", "B", "C"], { prompt: "" }, class: "form-select" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :floor, class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.select :floor, [*1..35], { prompt: "" }, class: "form-select" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="d-flex align-items-center col-sm-3">
+            <%= f.label :unit_no, "Unit Number", class: "form-label" %>
+          </div>
+          <div class="col-sm-9">
+            <%= f.text_field :unit_no, autofocus: true, class: "form-control", autocomplete: "unit_no" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="ml-5">
+            <%= f.submit "Ubah Unit", class: "btn btn-secondary w-25", style: "min-width: 50px" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
