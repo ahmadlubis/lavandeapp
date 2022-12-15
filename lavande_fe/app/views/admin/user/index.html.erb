@@ -7,76 +7,77 @@
   </head>
   <body>
     <div class="jumbotron">
-    <div class="card mb-4 w-100">
-      <div class="card-body">
-        <h2 class="card-title">List User</h2>
-        <%= form_with url: admin_user_index_path, method: :get, class: "mb-4" do |f| %>
-          <div class="row w-50">
-            <div class="col">
-              <label for="name">Nama</label>
-              <%= f.text_field :search, class: "form-control mt-1" %>
+      <div class="card mb-4 w-100">
+        <div class="card-body">
+          <h2 class="card-title">List User</h2>
+          <%= form_with url: admin_user_index_path, method: :get, class: "mb-4" do |f| %>
+            <div class="row w-50">
+              <div class="col">
+                <label for="name">Nama</label>
+                <%= f.text_field :search, class: "form-control mt-1" %>
+              </div>
             </div>
-          </div>
-          <% if @err_msg %>
-            <div class="alert alert-danger mt-2" role="alert">
-              <%= @err_msg %>
-            </div>
-          <% end %>
-          <%= f.submit "Cari", :name => nil, class: "btn btn-primary mt-3" %>
-        <% end %>
-
-        <% if params[:search].present? %>
-          <h5 class="mt-3" >User dengan nama "<%= params[:search] %>"</h5>
-        <% end %>
-        <% if @result["data"] && !@result["data"].empty? %>
-          <table class="table">
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone No.</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-            <% @result["data"].each do |user| %>
-              <tr>
-                <td class="align-middle"><%= user.name %></td>
-                <td class="align-middle"><%= user.email %></td>
-                <td class="align-middle"><%= user.phone_no %></td>
-                <td class="align-middle"><%= user.role %></td>
-                <td>
-                  <div class="row">
-                    <div class="col-md-auto">
-                      <% if user.status == 'active' %>
-                        <%= button_to "Nonaktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'nonactive', name: user.name }, class: "btn btn-outline-danger", disabled: user.id == get_user_id %>
-                      <% else %>
-                        <%= button_to "Aktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'active', name: user.name }, class: "btn btn-outline-success" %>
-                      <% end %>
-                    </div>
-                    <div class="col-md-auto">
-                      <%= button_to "Set as SuperAdmin", admin_user_elevate_path(user.id), method: :put, params: { name: user.name }, class: "btn btn-info", disabled: user.role == "admin" %>
-                    </div>
-                  </div>
-                </td>
-              </tr>
+            <% if @err_msg %>
+              <div class="alert alert-danger mt-2" role="alert">
+                <%= @err_msg %>
+              </div>
             <% end %>
-          </table>
-
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
-              <% (1..(@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil).each do |v| %>
-                <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
-              <% end %>
-              <li class="page-item"><a class="page-link <% if params[:page] == (@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
-            </ul>
-          </nav>
-        <% else %>
-          <% if params[:search].nil? %>
-            <p class="mt-2">Tidak ada user</p>
-          <% else %>
-            <p class="mt-3">Tidak ada user yang sesuai</p>
+            <%= f.submit "Cari", :name => nil, class: "btn btn-primary mt-3" %>
           <% end %>
-        <% end %>
+
+          <% if params[:search].present? %>
+            <h5 class="mt-3" >User dengan nama "<%= params[:search] %>"</h5>
+          <% end %>
+          <% if @result["data"] && !@result["data"].empty? %>
+            <table class="table">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone No.</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+              <% @result["data"].each do |user| %>
+                <tr>
+                  <td class="align-middle"><%= user.name %></td>
+                  <td class="align-middle"><%= user.email %></td>
+                  <td class="align-middle"><%= user.phone_no %></td>
+                  <td class="align-middle"><%= user.role %></td>
+                  <td>
+                    <div class="row">
+                      <div class="col-md-auto">
+                        <% if user.status == 'active' %>
+                          <%= button_to "Nonaktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'nonactive', name: user.name }, class: "btn btn-outline-danger", disabled: user.id == get_user_id %>
+                        <% else %>
+                          <%= button_to "Aktifkan", admin_user_status_path(user.id), method: :patch, params: { status: 'active', name: user.name }, class: "btn btn-outline-success" %>
+                        <% end %>
+                      </div>
+                      <div class="col-md-auto">
+                        <%= button_to "Set as SuperAdmin", admin_user_elevate_path(user.id), method: :put, params: { name: user.name }, class: "btn btn-info", disabled: user.role == "admin" %>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item"><a class="page-link <% if params[:page] == 1 %>disabled<% end %>" page="<%= params[:page] - 1 %>">Previous</a></li>
+                <% (1..(@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil).each do |v| %>
+                  <li class="page-item"><a class="page-link <% if params[:page] == v %>active<% end %>" page="<%= v %>"><%= v %></a></li>
+                <% end %>
+                <li class="page-item"><a class="page-link <% if params[:page] == (@result["meta"]["total"].to_f / @result["meta"]["limit"].to_f).ceil %>disabled<% end %>" page="<%= params[:page] + 1 %>">Next</a></li>
+              </ul>
+            </nav>
+          <% else %>
+            <% if params[:search].nil? %>
+              <p class="mt-2">Tidak ada user</p>
+            <% else %>
+              <p class="mt-3">Tidak ada user yang sesuai</p>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </body>

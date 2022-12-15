@@ -17,7 +17,7 @@
       <%= f.text_field :gov_id, class: "form-control mt-1", value: params[:gov_id] %>
     </div>
   </div>
-  <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
+  <%= f.submit "Cari Unit", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
 
 <%= form_with url: url_path, method: :get do |f| %>
@@ -63,7 +63,7 @@
       </nav>
 
       <div class="actions">
-        <%= f.submit "Select Unit", :name => nil, class: "btn btn-primary" %>
+        <%= f.submit "Pilih Unit", :name => nil, class: "btn btn-primary" %>
       </div>
     <% else %>
       <div class="mt-3">

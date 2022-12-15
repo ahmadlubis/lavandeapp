@@ -13,7 +13,7 @@
       <%= f.text_field :name, autofocus: true, class: "form-control mt-1", value: params[:name] %>
     </div>
   </div>
-  <%= f.submit "Search", :name => nil, class: "btn btn-secondary mt-3" %>
+  <%= f.submit "Cari User", :name => nil, class: "btn btn-secondary mt-3" %>
 <% end %>
 
 <%= form_with url: admin_tenant_index_path, method: :get do |f| %>
@@ -57,7 +57,7 @@
       </nav>
       
       <div class="actions">
-        <%= f.submit "Select User", :name => nil, class: "btn btn-primary" %>
+        <%= f.submit "Pilih User", :name => nil, class: "btn btn-primary" %>
       </div>
     <% else %>
       <div class="mt-3">
