@@ -10,9 +10,7 @@
     <div class="card mb-4 w-100">
       <div class="card-body">
         <h2 class="card-title">List Unit</h2>
-        <div class="text-right">
-          <%= button_to "Buat Unit", new_admin_unit_path, method: :get, class:"btn btn btn-primary" %>
-        </div>
+        <%= button_to "Buat Unit", new_admin_unit_path, method: :get, class:"btn btn btn-primary" %>
         <br>
         <%= form_with url: admin_unit_index_path, method: :get do |f| %>
           <div class="row">
